@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<namespace>Thunderstruct\Modules\Test</namespace>
+	<name>defaultModule</name>
+	
+	<version>
+		<release>0</release>
+		<major>0</major>
+		<minor>1</minor>
+	</version>
+	
+	<routing>
+		<route name="defaultModule:index" http-methods="GET"></route>
+	</routing>
+	
+	<required>
+		<require module="test" namespace="Vendor\App" version="1.0" />
+		<require plugin="security" namespace="Thunderstruct\Plugins" version="1.*" />
+	</required>
+	
+	<permissions>
+		<permission>DISPATCHER</permission>
+		<permission>ROUTER</permission>
+		<permission>LOADER</permission>
+		<permission>VIEW</permission>
+		<permission>REQUEST</permission>
+		<permission>RESPONSE</permission>
+	</permissions>
+	
+</Module>

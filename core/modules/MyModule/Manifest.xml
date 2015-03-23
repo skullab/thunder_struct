@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<namespace>Vendor\App</namespace>
+	<name>myModule</name>
+	
+	<routing>
+		<route>mymodule</route>
+		<route action="other">mymodule/other</route>
+	</routing>
+	
+	<permissions>
+		<permission>DISPATCHER</permission>
+		<permission>ROUTER</permission>
+		<permission>LOADER</permission>
+		<permission>VIEW</permission>
+		<permission>VOLT</permission>
+		<permission>RESPONSE</permission>
+	</permissions>
+	
+</Module>
