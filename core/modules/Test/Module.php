@@ -7,6 +7,6 @@ use Thunderstruct\API\Service;
 class Module extends ModuleAdapter {
 	
 	protected function initialize(){
-	
+		var_dump('TEST MODULE INITIALIZE');
 	}
 }

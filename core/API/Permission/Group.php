@@ -52,7 +52,20 @@ class Group implements \Iterator , Throwable{
 		return ($key !== NULL && $key !== FALSE);
 	}
 
-
+	public function toArray(){
+		return $this->group ;
+	}
+	
+	public function inflate(Permission $permission){
+		array_push($this->group, $permission);
+		return $this ;
+	}
+	
+	public function merge(Group $group){
+		$this->group = array_merge($this->group,$group->toArray());
+		return $this ;
+	}
+	
 	/* (non-PHPdoc)
 	 * @see \Thunderstruct\API\Interfaces\Throwable::throwException()
 	 */

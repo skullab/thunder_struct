@@ -3,16 +3,16 @@
 /* 									[CONFIGURATION]											  */
 
 $config = array(
-	'moduleDir'		=> 'MyAwesomeModule',
-	'namespace'		=> 'Vendor\App\Awesome',
-	'moduleName'	=> 'awesome',
-	'useVolt'		=> true,
-	'permissions'	=> array(	'DISPATCHER',
-								'LOADER',
-								'ROUTER',
-								'VIEW',
-								'REQUEST',
-								'RESPONSE'),
+	'moduleDir'			=> 'MyAwesomeModule',
+	'namespace'			=> 'Vendor\App\Awesome',
+	'moduleName'		=> 'awesome',
+	'useVolt'			=> true,
+	'permissionGroup'	=> array(
+			'GROUP_BASE',
+	),
+	'permissions'		=> array(	
+			'VOLT',
+	),
 );
 
 
@@ -52,8 +52,12 @@ class Module extends ModuleAdapter{
 		
 		fclose($module);
 		
+		foreach ($config['permissionGroup'] as $group){
+			$permissionGroup = '<group>Service::'.$group.'</group>'.PHP_EOL ;
+		}
+		
 		foreach ($config['permissions'] as $permission){
-			$permissions .= '<permission>'.$permission.'</permission>'.PHP_EOL ;
+			$permissions .= '<permission>Service::'.$permission.'</permission>'.PHP_EOL ;
 		}
 		
 		$manifest = fopen($dir.'/Manifest.xml', 'w');
@@ -67,6 +71,7 @@ class Module extends ModuleAdapter{
 	</routing>
 	
 	<permissions>
+		'.$permissionGroup.'
 		'.$permissions.'
 	</permissions>
 </Module>');

@@ -9,13 +9,7 @@
 	</routing>
 	
 	<permissions>
-		
-		<permission>DISPATCHER</permission>
-		<permission>ROUTER</permission>
-		<permission>LOADER</permission>
-		<permission>VIEW</permission>
-		<permission>VOLT</permission>
-		<permission>RESPONSE</permission>
+		<group>Service::GROUP_BASE</group>
 	</permissions>
 	
 </Module>

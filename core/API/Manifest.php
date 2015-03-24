@@ -18,6 +18,7 @@ class Manifest extends \SimpleXMLElement implements Throwable{
 	const TAG_CODE				= 'code';
 	const TAG_PERMISSIONS		= 'permissions';
 	const TAG_PERMISSION		= 'permission';
+	const TAG_GROUP				= 'group';
 	const TAG_RULE				= 'rule';
 	const TAG_REQUIRED			= 'required';
 	const TAG_REQUIRE			= 'require';
@@ -128,10 +129,20 @@ class Manifest extends \SimpleXMLElement implements Throwable{
 	}
 	
 	private function _getPermissions(){
-		$permissions = array();
-		foreach ($this->permissions->permission as $permission){
-			array_push($permissions, (string)$permission);
+		
+		$permissions = array(
+				'permissions'	=> array(),
+				'groups'		=> array()
+		);
+		
+		foreach($this->permissions->group as $group){
+			array_push($permissions['groups'], (string)$group);
 		}
+		
+		foreach ($this->permissions->permission as $permission){
+			array_push($permissions['permissions'], (string)$permission);
+		}
+		
 		return $permissions ;
 	}
 	

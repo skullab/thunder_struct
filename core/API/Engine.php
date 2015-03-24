@@ -15,8 +15,10 @@ use Thunderstruct\API\Engine\Exception;
 
 require 'Autoloader.php';
 final class Engine extends Application implements Throwable {
+	
 	private static $_alreadyInit = false;
 	private static $_instance = null;
+	
 	const VERSION_RELEASE = 'release';
 	const VERSION_MAJOR = 'major';
 	const VERSION_MINOR = 'minor';
@@ -25,16 +27,21 @@ final class Engine extends Application implements Throwable {
 			self::VERSION_MAJOR => 0,
 			self::VERSION_MINOR => 1 
 	);
+	
 	private $loader = null;
 	private $di = null;
 	private $debug;
+	
 	public function __construct(\Phalcon\DI $di = null) {
 		if (! self::$_alreadyInit) {
 			self::$_alreadyInit = true;
+			self::$_instance = $this;
 			
 			$this->loader = new Autoloader ();
 			
 			new Constants ();
+			
+			$this->definePermissionGroups();
 			
 			$this->di = $di == null ? new DependencyInjection () : $di;
 			
@@ -50,13 +57,25 @@ final class Engine extends Application implements Throwable {
 			
 			$this->debug = new \Phalcon\Debug ();
 			
-			self::$_instance = $this;
 		} else
 			self::throwException ( null, 100 );
 	}
 	public function setDI($dependencyInjector) {
 	}
 	public function getDI() {
+	}
+	protected function definePermissionGroups(){
+		
+		Permission\Manager::defineGroup(Service::GROUP_BASE, new Permission\Group(
+				new Permission(Service::DISPATCHER),
+				new Permission(Service::LOADER),
+				new Permission(Service::ROUTER),
+				new Permission(Service::VIEW),
+				new Permission(Service::REQUEST),
+				new Permission(Service::RESPONSE)
+		));
+		
+		
 	}
 	protected function _registerListener() {
 		$eventsManager = new \Phalcon\Events\Manager ();
@@ -111,15 +130,32 @@ final class Engine extends Application implements Throwable {
 		}
 		
 		$moduleName = $manifest->getModuleName ();
-		$modules = $this->getModules ();
-		if ($modules != null) {
-			foreach ( $this->getModules () as $name => $module ) {
-				if ($moduleName == $name) {
-					self::throwException ( $moduleName, 500 );
+		if($this->isRegisteredModule($moduleName))self::throwException ( $moduleName, 500 );
+		
+		$permissions = $manifest->getPermissions ();
+		$permissionGroup = new Permission\Group() ;
+		
+		if ($permissions != null) {
+			foreach ($permissions['groups'] as $groupName){
+				$service = 'Thunderstruct\API\\'.$groupName ;
+				$serviceGroup = defined($service) ? constant($service) : null ; 
+				$group = Permission\Manager::getGroup($serviceGroup);
+				if($group != null){
+					$permissionGroup->merge($group);
 				}
+			}
+			
+			foreach ( $permissions['permissions'] as $permission ) {
+				$service = 'Thunderstruct\API\\'.$permission ;
+				$serviceValue = defined($service) ? constant($service) : null ;
+				$permissionGroup->inflate(new Permission($serviceValue));
 			}
 		}
 		
+		foreach ($permissionGroup as $modulePermission){
+			Permission\Manager::addPermission($moduleName, $modulePermission);
+		}
+	
 		$this->registerModules ( array (
 				$moduleName => array (
 						'className' => ( string ) $manifest->getModuleNamespace () . '\Module',
@@ -128,17 +164,11 @@ final class Engine extends Application implements Throwable {
 								'full' => $manifest->getVersion (),
 								'release' => $manifest->getVersionInt ( 'release' ),
 								'major' => $manifest->getVersionInt ( 'major' ),
-								'minor' => $manifest->getVersionInt ( 'minor' ) 
-						) 
-				) 
+								'minor' => $manifest->getVersionInt ( 'minor' )
+						),
+						'permissions' => $permissionGroup
+				)
 		), true );
-		
-		$permissions = $manifest->getPermissions ();
-		if ($permissions != null) {
-			foreach ( $manifest->getPermissions () as $permission ) {
-				Permission\Manager::addPermission ( $moduleName, new Permission ( $permission ) );
-			}
-		}
 		
 		return $moduleName;
 	}
@@ -172,7 +202,17 @@ final class Engine extends Application implements Throwable {
 	public function debugMode($active) {
 		$this->debug->listen ( $active );
 	}
-	
+	public function isRegisteredModule($moduleName){
+		if(trim($moduleName) == false)return false ;
+		
+		foreach ($this->getModules() as $name => $module){
+			if($moduleName === $name)return true;
+		}
+		return false ;
+	}
+	public function getModuleDefinition($moduleName){
+		return $this->getModules()[$moduleName] ;
+	}
 	/*
 	 * (non-PHPdoc)
 	 * @see \Thunderstruct\core\engine\interfaces\Throwable::throwException()

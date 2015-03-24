@@ -13,14 +13,20 @@ abstract class Module implements ModuleDefinitionInterface {
 	private $path ;
 	private $eventsManager ;
 	private $loader ;
+	private $dispatcher;
+	private $view;
 	private $configDirs ;
 	
 	public function __construct(){
+		var_dump('call module constructor');
+		
 		$ref = new \ReflectionClass($this);
 		$this->path = str_replace(basename($ref->getFileName()),'',$ref->getFileName());
 		$this->namespace = $ref->getNamespaceName();
 		$this->baseDir = basename(str_replace(basename($ref->getFileName()),'',$ref->getFileName()));
 		
+		$this->dispatcher = Engine::getInstance()->getService(Service::DISPATCHER);
+		$this->view = Engine::getInstance()->getService(Service::VIEW);
 		$this->loader = Engine::getInstance()->getService(Service::LOADER);
 		$this->configDirs = $this->loader->getConfigDirs('../');
 		
@@ -29,6 +35,7 @@ abstract class Module implements ModuleDefinitionInterface {
 	}
 	
 	public function registerAutoloaders(){
+		var_dump('call module registerAutoloaders');
 		
 		$skip = $this->beforeRegisterAutoloaders($this->loader);
 		if($skip === true)return;
@@ -46,15 +53,13 @@ abstract class Module implements ModuleDefinitionInterface {
 	}
 	
 	public function registerServices($di){
+		var_dump('call module registerServices ');
 		
 		$skip = $this->beforeRegisterServices($di);
 		if($skip === true)return;
 		
-		$dispatcher = Engine::getInstance()->getService(Service::DISPATCHER);
-		$view = Engine::getInstance()->getService(Service::VIEW);
-		
-		$this->onRegisterDispatcher($dispatcher);
-		$this->onRegisterView($view);
+		$this->onRegisterDispatcher($this->dispatcher);
+		$this->onRegisterView($this->view);
 		
 		$this->afterRegisterServices($di);
 	}

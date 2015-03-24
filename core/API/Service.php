@@ -33,11 +33,12 @@ class Service extends Enum implements Throwable{
 	const MODELS_CACHE			= 'modelsCache';
 	const VIEWS_CACHE			= 'viewsCache';
 	
+	const GROUP_BASE			= 'groupBase';
+	
 	public $service ;
 	
 	public function __construct($serviceName){
-		parent::__construct();
-		if($this->isEnumValue($serviceName)){
+		if(self::isEnumValue($serviceName)){
 			$this->service = $this->$serviceName = Engine::getInstance()->getService($serviceName);
 		}else self::throwException($serviceName,200);
 	}
@@ -48,6 +49,10 @@ class Service extends Enum implements Throwable{
 		}catch (\Phalcon\DI\Exception $e){
 			self::throwException($serviceName,200);
 		}
+	}
+	
+	public static function isService($value){
+		return self::isEnumValue($value);
 	}
 	
 	public static function throwException($message = null, $code = 0, Exception $previous = null) {

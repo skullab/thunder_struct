@@ -19,12 +19,8 @@
 	</required>
 	
 	<permissions>
-		<permission>DISPATCHER</permission>
-		<permission>ROUTER</permission>
-		<permission>LOADER</permission>
-		<permission>VIEW</permission>
-		<permission>REQUEST</permission>
-		<permission>RESPONSE</permission>
+		<group>Service::GROUP_BASE</group>
+		<permission>Service::VOLT</permission>
 	</permissions>
 	
 </Module>
