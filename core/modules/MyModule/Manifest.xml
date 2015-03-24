@@ -9,6 +9,7 @@
 	</routing>
 	
 	<permissions>
+		
 		<permission>DISPATCHER</permission>
 		<permission>ROUTER</permission>
 		<permission>LOADER</permission>

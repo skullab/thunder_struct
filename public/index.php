@@ -4,6 +4,7 @@ use Thunderstruct\API\Engine;
 use Thunderstruct\API\Service;
 use Thunderstruct\API\Tokenizer;
 use Thunderstruct\API\Engine\Constants;
+use Thunderstruct\API\Permission;
 
 //class_alias('Thunderstruct\API\Engine\Engine', 'Thunderstruct');
 
