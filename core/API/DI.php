@@ -1,6 +1,7 @@
 <?php
 
 namespace Thunderstruct\API;
+use Thunderstruct\API\Debug\Log;
 
 class DI extends \Phalcon\DI\FactoryDefault {
 	
@@ -31,11 +32,12 @@ class DI extends \Phalcon\DI\FactoryDefault {
 	private function checkPermission($name){
 		
 		$moduleName = $this->router->getModuleName ();
-		$permission = Permission\Manager::checkPermission ( $moduleName, $name );
+		if(trim($moduleName) == false)return;
 		
+		$permission = Permission\Manager::checkPermission ( $moduleName, $name );
 		$className = $this->router->getNamespaceName ();
 			
-		var_dump ( 'module ' . $moduleName . ' in namespace '.$className.' wanna get  ' . $name );
+		//var_dump ( 'module ' . $moduleName . ' in namespace '.$className.' wanna get  ' . $name );
 		
 		if (	Service::isService($name) && 
 				Engine::getInstance()->isRegisteredModule($moduleName) &&
@@ -43,5 +45,7 @@ class DI extends \Phalcon\DI\FactoryDefault {
 			//var_dump ( 'doesn\'t have permission for ' . $name . ' ' . $moduleName . ' ' . ( int ) $permission );
 			Engine::throwException($name,300);
 		}
+		
+		return true ;
 	}
 }

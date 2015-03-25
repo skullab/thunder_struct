@@ -18,7 +18,7 @@ abstract class Module implements ModuleDefinitionInterface {
 	private $configDirs ;
 	
 	public function __construct(){
-		var_dump('call module constructor');
+		//var_dump('call module constructor');
 		
 		$ref = new \ReflectionClass($this);
 		$this->path = str_replace(basename($ref->getFileName()),'',$ref->getFileName());
@@ -35,7 +35,7 @@ abstract class Module implements ModuleDefinitionInterface {
 	}
 	
 	public function registerAutoloaders(){
-		var_dump('call module registerAutoloaders');
+		//var_dump('call module registerAutoloaders');
 		
 		$skip = $this->beforeRegisterAutoloaders($this->loader);
 		if($skip === true)return;
@@ -53,7 +53,7 @@ abstract class Module implements ModuleDefinitionInterface {
 	}
 	
 	public function registerServices($di){
-		var_dump('call module registerServices ');
+		//var_dump('call module registerServices ');
 		
 		$skip = $this->beforeRegisterServices($di);
 		if($skip === true)return;
@@ -87,7 +87,8 @@ abstract class Module implements ModuleDefinitionInterface {
 		$dispatcher->setDefaultNamespace($this->namespace.'\Controllers');
 	}
 	protected function onRegisterView($view){
-		$view->setViewsDir($this->configDirs->core->modules.$this->baseDir.'/views/');
+		//$view->setViewsDir($this->configDirs->core->modules.$this->baseDir.'/views/');
+		$view->setTemplateAfter('main');
 	}
 	protected function afterRegisterServices($di){}
 	

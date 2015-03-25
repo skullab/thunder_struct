@@ -12,6 +12,7 @@ use Thunderstruct\API\Router;
 use Thunderstruct\API\Manifest;
 use Thunderstruct\API\Engine\Constants;
 use Thunderstruct\API\Engine\Exception;
+use Thunderstruct\API\Debug\Log;
 
 require 'Autoloader.php';
 final class Engine extends Application implements Throwable {
@@ -203,7 +204,9 @@ final class Engine extends Application implements Throwable {
 		$this->debug->listen ( $active );
 	}
 	public function isRegisteredModule($moduleName){
+		
 		if(trim($moduleName) == false)return false ;
+		if(empty($this->getModules()))return false ;
 		
 		foreach ($this->getModules() as $name => $module){
 			if($moduleName === $name)return true;

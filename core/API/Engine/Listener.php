@@ -30,7 +30,7 @@ class Listener implements Throwable {
 		$className = $namespace.'\\'.$controller ;
 		
 		var_dump('before start module : '.$moduleName.' - '.$className);
-		var_dump('module class name exist ? '.(int)class_exists($className));
+		//var_dump('module class name exist ? '.(int)class_exists($className));
 	}
 	
 	public function afterStartModule($event,$engine){
@@ -48,11 +48,13 @@ class Listener implements Throwable {
 	}
 	
 	public function beforeHandleRequest($event,$engine){
-		var_dump('before handle request');
+		//var_dump('before handle request');
+		echo '<h3>before handle</h3>';
 	}
 	
 	public function afterHandleRequest($event,$engine){
-		var_dump('after handle request');
+		//var_dump('after handle request');
+		echo '<h3>after handle</h3>';
 	}
 	
 	public static function throwException($message = null, $code = 0, Exception $previous = null) {

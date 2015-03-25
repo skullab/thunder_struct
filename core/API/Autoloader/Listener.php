@@ -7,8 +7,8 @@ class Listener {
 		//var_dump('loader : beforeCheckClass');
 	}
 	public function pathFound($event,$loader){
-		var_dump('loader : pathFound');
-		var_dump($event->getData(),$loader);
+		//var_dump('loader : pathFound');
+		//var_dump($event->getData(),$loader);
 	}
 	public function afterCheckClass($event,$loader){
 		//var_dump('loader : afterCheckClass');

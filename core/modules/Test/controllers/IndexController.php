@@ -6,6 +6,7 @@ use Thunderstruct\API\Engine;
 use Thunderstruct\API\Service;
 use Thunderstruct\API\Thunderstruct\API;
 use Thunderstruct\API\Mvc\Controller;
+use Thunderstruct\API\Debug\Log;
 
 class IndexController extends Controller{
 	

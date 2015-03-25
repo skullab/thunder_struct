@@ -4,6 +4,7 @@ namespace Thunderstruct\API\Permission;
 
 use Thunderstruct\API\Interfaces\Throwable;
 use Thunderstruct\API\Permission;
+use Thunderstruct\API\Engine;
 
 final class Manager implements Throwable{
 	
@@ -31,9 +32,15 @@ final class Manager implements Throwable{
 	}
 	
 	public static function checkPermission($moduleName,$serviceName){
-		$permissions = self::getPermissions($moduleName);
-		foreach ($permissions as $permission){
-			if($permission->getServiceName() === $serviceName)return true;
+		$registeredPermissions = self::getPermissions($moduleName);
+		$declaredPermissions = Engine::getInstance()->getModuleDefinition($moduleName)['permissions'] ;
+		foreach ($declaredPermissions as $declaredPermission){
+			foreach ($registeredPermissions as $registerdPermission){
+				if(	$declaredPermission == $registerdPermission && 
+					$declaredPermission->getServiceName() === $serviceName){
+					return true ;
+				}
+			}
 		}
 		return false ;
 	}
