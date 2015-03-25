@@ -15,6 +15,8 @@ use Thunderstruct\API\Engine\Exception;
 use Thunderstruct\API\Debug\Log;
 
 require 'Autoloader.php';
+require 'Engine/Functions.php';
+
 final class Engine extends Application implements Throwable {
 	
 	private static $_alreadyInit = false;
@@ -93,7 +95,8 @@ final class Engine extends Application implements Throwable {
 		
 		$this->di->set ( Service::VIEW, function () use($dirs) {
 			$view = new \Phalcon\Mvc\View ();
-			$view->setViewsDir ( $dirs->ui->views );
+			$view->setLayoutsDir ( '../../../'.$dirs->ui->themes . 'default/' );
+			$view->setTemplateAfter('main');
 			return $view;
 		}, true );
 		
@@ -205,8 +208,7 @@ final class Engine extends Application implements Throwable {
 	}
 	public function isRegisteredModule($moduleName){
 		
-		if(trim($moduleName) == false)return false ;
-		if(empty($this->getModules()))return false ;
+		if(trim($moduleName) == false || count($this->getModules()) == 0)return false ;
 		
 		foreach ($this->getModules() as $name => $module){
 			if($moduleName === $name)return true;

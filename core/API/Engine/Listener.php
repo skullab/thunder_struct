@@ -17,24 +17,24 @@ class Listener implements Throwable {
 	}
 	
 	public function boot($event,$engine){
-		var_dump('boot');
+		//var_dump('boot');
 		//var_dump($engine);
 	}
 	
 	public function beforeStartModule($event,$engine){
-		$dispatcher = $engine->getService(Service::DISPATCHER) ;
+		/*$dispatcher = $engine->getService(Service::DISPATCHER) ;
 		$router = $engine->getService(Service::ROUTER);
 		$moduleName = $router->getModuleName() ;
 		$namespace = $router->getNamespaceName();
 		$controller = ucfirst($router->getControllerName()).'Controller';
-		$className = $namespace.'\\'.$controller ;
+		$className = $namespace.'\\'.$controller ;*/
 		
-		var_dump('before start module : '.$moduleName.' - '.$className);
+		//var_dump('before start module : '.$moduleName.' - '.$className);
 		//var_dump('module class name exist ? '.(int)class_exists($className));
 	}
 	
 	public function afterStartModule($event,$engine){
-		var_dump('after start module');
+		//var_dump('after start module');
 		$dispatcher = $engine->getService(Service::DISPATCHER) ;
 		$router = $engine->getService(Service::ROUTER);
 		$moduleName = $router->getModuleName() ;

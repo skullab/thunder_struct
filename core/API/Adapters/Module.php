@@ -87,8 +87,7 @@ abstract class Module implements ModuleDefinitionInterface {
 		$dispatcher->setDefaultNamespace($this->namespace.'\Controllers');
 	}
 	protected function onRegisterView($view){
-		//$view->setViewsDir($this->configDirs->core->modules.$this->baseDir.'/views/');
-		$view->setTemplateAfter('main');
+		$view->setViewsDir($this->configDirs->core->modules.$this->baseDir.'/views/');
 	}
 	protected function afterRegisterServices($di){}
 	
