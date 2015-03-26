@@ -30,8 +30,7 @@ abstract class Module implements ModuleDefinitionInterface {
 		$this->loader = Engine::getInstance()->getService(Service::LOADER);
 		$this->configDirs = $this->loader->getConfigDirs('../');
 		
-		$this->initialize();
-		
+		$this->onConstruct();
 	}
 	
 	public function registerAutoloaders(){
@@ -77,7 +76,7 @@ abstract class Module implements ModuleDefinitionInterface {
 		return $this->eventsManager;
 	}
 	
-	protected function initialize(){}
+	protected function onConstruct(){}
 	protected function beforeRegisterAutoloaders($loader,$skip = true){}
 	protected function onRegisterAutoloaders($loader){}
 	protected function afterRegisterAutoloaders($loader){}

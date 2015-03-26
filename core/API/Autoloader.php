@@ -1,7 +1,7 @@
 <?php
 
 namespace Thunderstruct\API ;
-use  \Phalcon\Loader as Loader ;
+use \Phalcon\Loader as Loader ;
 use \Phalcon\Config\Adapter\Ini as Config;
 use Thunderstruct\API\Interfaces\Throwable ;
 use Thunderstruct\API\Autoloader\Exception ;
@@ -10,13 +10,17 @@ use Thunderstruct\API\Autoloader\Listener;
 require 'Interfaces/Throwable.php';
 
 final class Autoloader extends Loader implements Throwable{
+	
 	private static $_alreadyInit = false ;
+	private static $_token = null ;
 	
 	private $config = null ;
+	private $newDbIniName = null ;
 	
-	public function __construct(){
+	public function __construct($token){
 		if(!self::$_alreadyInit){
 			self::$_alreadyInit = true ;
+			self::$_token = $token ;
 			parent::__construct();
 			$this->registerConfiguration();
 			$this->registerDefaultDirs();
@@ -35,11 +39,19 @@ final class Autoloader extends Loader implements Throwable{
 		$backDir = '/../' ;
 		$this->config = array();
 		$this->config['app'] = new Config($backDir.'config/app.ini.php');
-		$this->config['db'] = new Config($backDir.'config/db.ini.php');
 		$this->config['dir'] = new Config($backDir.'config/dir.ini.php');
-		//var_dump($this->config);
+		$this->config['db'] = new Config($backDir.'config/db.ini.php');
+		$this->createDbName();
 	}
 	
+	private function createDbName(){
+		$dbname = $this->config['db']->database->default ;
+		if(strpos($dbname,'_ver_') !== false){
+			$dbname = str_replace('_ver_', '_'.Engine::getVersion(), $dbname);
+		}
+		$this->config['db']->database->dbname = $dbname ;
+	}
+	 
 	private function registerDefaultDirs(){
 		$backDir = '../' ;
 		$this->registerDirs(array(
@@ -58,6 +70,13 @@ final class Autoloader extends Loader implements Throwable{
 		),true)->register();
 		//var_dump($this->getNamespaces());
 	}	
+	public function eFiles(){
+		rename('../core/config/db.ini.php', '../core/config/pippo.ini.php');
+	}
+	public function rFiles(){
+		rename('../core/config/pippo.ini.php', '../core/config/db.ini.php');
+	}
+	
 	public function getConfigDirs($basePath = null){
 		$backDir = '/../' ;
 		$dirs = new Config($backDir.'config/dir.ini.php');
@@ -71,6 +90,31 @@ final class Autoloader extends Loader implements Throwable{
 		return $dirs ;
 	}
 	
+	public function getDbPrefix(){
+		return $this->config['db']->database->prefix ;
+	}
+	
+	public function getDbConnection($token){
+		if($token === self::$_token){
+			$adapter = '\Phalcon\Db\Adapter\Pdo\\' . $this->config['db']->database->adapter ;
+			
+			if($this->config['db']->database->dsn != null){
+				return new $adapter(array(
+						'dsn'	=> $this->config['db']->database->dsn,
+						'username'	=> $this->config['db']->database->username,
+						'password'	=> $this->config['db']->database->password
+				));
+			}else{
+				return new $adapter(array(
+						'host'		=> $this->config['db']->database->host,
+						'username'	=> $this->config['db']->database->username,
+						'password'	=> $this->config['db']->database->password,
+						'dbname'	=> $this->config['db']->database->dbname
+				));
+			}
+			
+		}else self::throwException(null,200);
+	}
 	/* (non-PHPdoc)
 	 * @see \Thunderstruct\core\engine\interfaces\Throwable::throwException()
 	 */

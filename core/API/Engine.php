@@ -14,6 +14,7 @@ use Thunderstruct\API\Engine\Constants;
 use Thunderstruct\API\Engine\Exception;
 use Thunderstruct\API\Debug\Log;
 
+require 'Tokenizer.php';
 require 'Autoloader.php';
 require 'Engine/Functions.php';
 
@@ -21,6 +22,7 @@ final class Engine extends Application implements Throwable {
 	
 	private static $_alreadyInit = false;
 	private static $_instance = null;
+	private static $_token = null ;
 	
 	const VERSION_RELEASE = 'release';
 	const VERSION_MAJOR = 'major';
@@ -40,7 +42,8 @@ final class Engine extends Application implements Throwable {
 			self::$_alreadyInit = true;
 			self::$_instance = $this;
 			
-			$this->loader = new Autoloader ();
+			self::$_token = Tokenizer::randomToken();
+			$this->loader = new Autoloader (self::$_token);
 			
 			new Constants ();
 			
@@ -107,7 +110,7 @@ final class Engine extends Application implements Throwable {
 		}, true );
 		
 		$this->di->set ( Service::ROUTER, function () {
-			$router = new Router ( false );
+			$router = new Router ( );
 			return $router;
 		}, true );
 		
@@ -123,14 +126,25 @@ final class Engine extends Application implements Throwable {
 			) );
 			return $volt;
 		}, true );
+		
+		$this->di->set(Service::DB,function(){
+			return $this->loader->getDbConnection(self::$_token);
+		});
 	}
 	protected function _registerModuleFromManifest($dir) {
 		$router = $this->di->get ( Service::ROUTER );
 		$dirs = $this->loader->getConfigDirs ( '../' );
 		$manifest = Reader::load ( $dirs->core->modules . $dir . '/Manifest.xml' );
 		$routes = $manifest->getRoutes ();
+		
 		foreach ( $routes as $route ) {
-			$router->add ( $route );
+			
+			if(!$router->routeExist($route)){
+				$router->add ( $route );
+			}else{
+				var_dump('The route '.$route->getCompiledPattern().' already exists');
+			}
+			
 		}
 		
 		$moduleName = $manifest->getModuleName ();
@@ -215,9 +229,15 @@ final class Engine extends Application implements Throwable {
 		}
 		return false ;
 	}
+	
 	public function getModuleDefinition($moduleName){
 		return $this->getModules()[$moduleName] ;
 	}
+	
+	public function getDbPrefix(){
+		return $this->loader->getDbPrefix() ;
+	}
+	
 	/*
 	 * (non-PHPdoc)
 	 * @see \Thunderstruct\core\engine\interfaces\Throwable::throwException()

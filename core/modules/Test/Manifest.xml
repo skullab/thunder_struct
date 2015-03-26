@@ -11,6 +11,7 @@
 	
 	<routing>
 		<route name="defaultModule:index" http-methods="GET"></route>
+		<route>admin</route>
 	</routing>
 	
 	<required>

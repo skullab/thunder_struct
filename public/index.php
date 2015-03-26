@@ -16,7 +16,9 @@ Log::enableBacktrace(true);
 Log::sessionStart();
 
 $e = new Engine();
+try{
 echo $e->handle()->getContent();
+}catch(Exception $e){}
 
 Log::sessionEnd();
 

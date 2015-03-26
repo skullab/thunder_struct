@@ -9,6 +9,7 @@ class Exception extends BaseException{
 	 */
 	protected function defineMessages(&$messages,$extra = []) {
 		$messages[100] = 'Autoloader is already instantiated';
+		$messages[200] = 'Secure hash is incorrect' ;
 	}
 
 }

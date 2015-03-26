@@ -4,6 +4,7 @@ namespace Thunderstruct\API;
 
 final class Tokenizer {
 	
+	
 	public static function randomToken($length = 16){
 		$length = $length | 1 ;
 		$bytes = openssl_random_pseudo_bytes($length);

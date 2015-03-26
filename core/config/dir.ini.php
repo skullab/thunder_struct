@@ -17,13 +17,13 @@ volt		= core/cache/volt/
 
 [ui]
 
-layouts	= core/ui/layouts/
-themes	= core/ui/themes/
-views	= core/ui/views/
+layouts		= core/ui/layouts/
+themes		= core/ui/themes/
+views		= core/ui/views/
 
 [public]
 
-js		= public/js/
-css		= public/css/
-img		= public/img/
+js			= public/js/
+css			= public/css/
+img			= public/img/
 

@@ -4,8 +4,14 @@
 
 host		= localhost
 username	= root
-password	= root
+password	= 
 
-adapter		= Mysql
+;adapter	= Mysql
+adapter		= Sqlite
+;adpater	= Postgresql
+;adapter	= Oracle
+
 prefix		= ts
-default		= thunder_struct_ver_
+default		= ../core/data/thunder_struct_ver_
+dsn			= null
+

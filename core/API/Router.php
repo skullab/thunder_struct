@@ -26,4 +26,24 @@ class Router extends \Phalcon\Mvc\Router {
 			return parent::add($pattern,$paths);
 		}
 	}
+	
+	public function routeExist(\Phalcon\Mvc\Router\Route $route){
+		
+		foreach ($this->getRoutes() as $_route){
+			if(	$_route->getCompiledPattern() == $route->getCompiledPattern() &&
+				$_route->getPaths()['controller'] == $route->getPaths()['controller'] &&
+				$_route->getPaths()['action'] == $route->getPaths()['action']	)return true ;
+		}
+		return false ;
+		
+	}
+	
+	public function routePatternExist($pattern){
+		
+		foreach ($this->getRoutes() as $_route){
+			if($_route->getCompiledPattern() == $pattern)return true ;
+		}
+		return false ;
+		
+	}
 }

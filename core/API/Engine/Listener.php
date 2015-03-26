@@ -49,11 +49,13 @@ class Listener implements Throwable {
 	
 	public function beforeHandleRequest($event,$engine){
 		//var_dump('before handle request');
+		//Service::get(Service::LOADER)->eFIles();
 		echo '<h3>before handle</h3>';
 	}
 	
 	public function afterHandleRequest($event,$engine){
 		//var_dump('after handle request');
+		//Service::get(Service::LOADER)->rFIles();
 		echo '<h3>after handle</h3>';
 	}
 	

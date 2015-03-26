@@ -4,7 +4,7 @@
 	<name>myModule</name>
 	
 	<routing>
-		<route>mymodule</route>
+		<route>admin</route>
 		<route action="other">mymodule/other</route>
 	</routing>
 	
