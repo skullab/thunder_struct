@@ -4,8 +4,6 @@ namespace Thunderstruct\API;
 
 class Router extends \Phalcon\Mvc\Router {
 	
-	public function getDI(){}
-	
 	/* @overloading */
 	public function add($pattern,$paths = null ,$httpMethods = null){
 		$_route = $pattern ;

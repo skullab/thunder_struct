@@ -3,13 +3,31 @@
 	<namespace>Thunderstruct\Modules\Test</namespace>
 	<name>defaultModule</name>
 	
+	<info>
+		<author>Mr. Thunder</author>
+		<description>
+			<long>
+				This is a looooooong description of this module
+				with many many many lines...
+				and lines...
+				lines...
+			</long>
+			<short>shortly...</short>
+		</description>
+	</info>
+	
 	<version>
 		<release>0</release>
 		<major>0</major>
 		<minor>1</minor>
 	</version>
 	
+	<template>
+		<engine>php</engine>
+	</template>
+	
 	<routing>
+		<route controller="1">:controller</route>
 		<route name="defaultModule:index" http-methods="GET"></route>
 		<route>admin</route>
 	</routing>

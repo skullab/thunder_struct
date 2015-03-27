@@ -1,15 +1,14 @@
 <?php
 
-namespace Thunderstruct\API\Adapters;
+namespace Thunderstruct\API\Adapters\Module;
 use Thunderstruct\API\Adapters\Module;
 
-abstract class ModuleVolt extends Module {
+class Volt extends Module{
 	
 	protected function onRegisterView($view) {
 		parent::onRegisterView($view);
 		$view->registerEngines(array(
-			'.volt'	=> 'volt', 
+				'.volt'	=> 'volt',
 		));
 	}
-
 }

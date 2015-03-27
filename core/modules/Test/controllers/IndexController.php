@@ -13,12 +13,7 @@ class IndexController extends Controller{
 	
 	
 	public function indexAction(){
-		$config = new \Phalcon\Config\Adapter\Ini('../core/config/db.ini.php');
-		var_dump($config);
-	}
-	
-	public function otherAction(){
-		$this->flash->notice('other of default');
+		
 	}
 	
 }

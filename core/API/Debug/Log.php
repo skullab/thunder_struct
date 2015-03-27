@@ -78,7 +78,14 @@ class Log {
 			ob_end_clean();
 			echo $out ;
 		}
-		
+	}
+	
+	public static function format(\Exception $e){
+		$output = get_class($e) . ": ". $e->getMessage(). "\n" .
+    	" File = " . $e->getFile(). "\n" .
+    	" Line = " . $e->getLine(). "\n" .
+    	$e->getTraceAsString();
+		return $output ;
 	}
 	
 	public static function I($tag,$expression){
@@ -101,7 +108,7 @@ class Log {
 	}
 	
 	public static function sessionStart($tag = null){
-		if($tag == null)return ;
+		if(!self::$active || $tag == null)return ;
 		
 		if(!self::$session){
 			self::$session = true ;
@@ -112,7 +119,7 @@ class Log {
 		
 	}
 	public static function sessionEnd(){
-		if(!self::$session)return;
+		if(!self::$active || !self::$session)return;
 		self::$session = false ;
 		ob_end_clean();
 		echo self::$sessionBuffer[self::$filterTag] ;

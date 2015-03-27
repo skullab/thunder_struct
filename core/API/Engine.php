@@ -3,7 +3,6 @@
 namespace Thunderstruct\API;
 
 use \Phalcon\Mvc\Application as Application;
-// use \Phalcon\DI\FactoryDefault as DependencyInjection ;
 use Thunderstruct\API\DI as DependencyInjection;
 use Thunderstruct\API\Interfaces\Throwable;
 use Thunderstruct\API\Autoloader;
@@ -59,7 +58,7 @@ final class Engine extends Application implements Throwable {
 			
 			$this->_registerModules ();
 			
-			$this->_registerListener ();
+			$this->_registerListeners ();
 			
 			$this->debug = new \Phalcon\Debug ();
 			
@@ -78,15 +77,21 @@ final class Engine extends Application implements Throwable {
 				new Permission(Service::ROUTER),
 				new Permission(Service::VIEW),
 				new Permission(Service::REQUEST),
-				new Permission(Service::RESPONSE)
+				new Permission(Service::RESPONSE),
+				new Permission(Service::URL)
 		));
 		
 		
 	}
-	protected function _registerListener() {
+	protected function _registerListeners() {
 		$eventsManager = new \Phalcon\Events\Manager ();
 		$eventsManager->attach ( 'application', new Engine\Listener () );
 		$this->setEventsManager ( $eventsManager );
+		
+		$eventsManager = new \Phalcon\Events\Manager ();
+		$eventsManager->attach ( 'dispatch', new Dispatcher\Listener() );
+		$this->di->get(Service::DISPATCHER)->setEventsManager($eventsManager);
+		
 	}
 	protected function _registerServices() {
 		$loader = $this->loader;
@@ -99,7 +104,8 @@ final class Engine extends Application implements Throwable {
 		$this->di->set ( Service::VIEW, function () use($dirs) {
 			$view = new \Phalcon\Mvc\View ();
 			$view->setLayoutsDir ( '../../../'.$dirs->ui->themes . 'default/' );
-			$view->setTemplateAfter('main');
+			$view->setPartialsDir( '../../../'.$dirs->ui->themes . 'default/partials/' );
+			$view->setTemplateBefore('main');
 			return $view;
 		}, true );
 		
@@ -110,7 +116,7 @@ final class Engine extends Application implements Throwable {
 		}, true );
 		
 		$this->di->set ( Service::ROUTER, function () {
-			$router = new Router ( );
+			$router = new Router (false);
 			return $router;
 		}, true );
 		
@@ -142,7 +148,7 @@ final class Engine extends Application implements Throwable {
 			if(!$router->routeExist($route)){
 				$router->add ( $route );
 			}else{
-				var_dump('The route '.$route->getCompiledPattern().' already exists');
+				var_dump('The route '.$route->getPattern().' already exists');
 			}
 			
 		}
@@ -174,6 +180,8 @@ final class Engine extends Application implements Throwable {
 			Permission\Manager::addPermission($moduleName, $modulePermission);
 		}
 	
+		var_dump($manifest->getRequired());
+		
 		$this->registerModules ( array (
 				$moduleName => array (
 						'className' => ( string ) $manifest->getModuleNamespace () . '\Module',
@@ -184,7 +192,9 @@ final class Engine extends Application implements Throwable {
 								'major' => $manifest->getVersionInt ( 'major' ),
 								'minor' => $manifest->getVersionInt ( 'minor' )
 						),
-						'permissions' => $permissionGroup
+						'required' => $manifest->getRequired(),
+						'permissions' => $permissionGroup,
+						'templateEngine' => $manifest->getTemplateEngine()
 				)
 		), true );
 		
@@ -214,6 +224,24 @@ final class Engine extends Application implements Throwable {
 	public static function getInstance() {
 		return self::$_instance;
 	}
+	
+	public function run(){
+		try{
+			Log::active(true);
+			Log::enableBacktrace(true);
+			Log::sessionStart();
+			echo $this->handle()->getContent();
+		}catch (\Exception $e){
+			if(strpos(get_class($e), 'Phalcon') !== false){
+				Log::E('engine',Log::format($e));
+			}else{
+				throw $e ;
+			}
+		}finally {
+			Log::sessionEnd();
+		}	
+	}
+	
 	public function getService($name) {
 		return $this->di->get ( $name );
 	}

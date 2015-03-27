@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-	<namespace>Vendor\App</namespace>
-	<name>myModule</name>
+	<namespace>Awesome\App</namespace>
+	<name>awesome</name>
+	
+	<template>
+		<engine>volt</engine>
+	</template>
 	
 	<routing>
-		<route controller="1">:controller</route>
-		<route action="1">mymodule/:action</route>
+		<route>awesome</route>
 	</routing>
 	
 	<permissions>
 		<group>Service::GROUP_BASE</group>
-		<permission>Service::FLASH</permission>
+
 		<permission>Service::VOLT</permission>
+
 	</permissions>
-	
 </Module>

@@ -24,7 +24,8 @@ class Manifest extends \SimpleXMLElement implements Throwable{
 	const TAG_REQUIRE			= 'require';
 	const TAG_REQUIRED_MODULE	= 'module';
 	const TAG_PLUGIN			= 'plugin';
-	
+	const TAG_TEMPLATE			= 'template';
+	const TAG_ENGINE			= 'engine';
 	const ATTRIBUTE_MODULE		= 'module';
 	const ATTRIBUTE_PLUGIN		= 'plugin';
 	const ATTRIBUTE_COMPONENT	= 'component';
@@ -76,12 +77,20 @@ class Manifest extends \SimpleXMLElement implements Throwable{
 		return (int)$this->version->$part ;	
 	}
 	
+	public function getTemplateEngine(){
+		return (string)$this->template->engine ;
+	}
+	
 	public function hasRouting(){
 		return isset($this->routing);
 	}
 	
 	public function hasPermissions(){
 		return isset($this->permissions);
+	}
+	
+	public function hasRequired(){
+		return isset($this->required);
 	}
 	
 	public function isModule(){
@@ -146,6 +155,23 @@ class Manifest extends \SimpleXMLElement implements Throwable{
 		return $permissions ;
 	}
 	
+	public function getRequired(){
+		return $this->hasRequired() ? $this->_getRequired() : null ;
+	}
+	
+	private function _getRequired(){
+		$required = array();
+		
+		foreach($this->required->require as $require){
+			$directives = array() ;
+			foreach ($require->attributes() as $attribute => $value){
+				$directives[(string)$attribute] = (string)$value ;
+			}
+			array_push($required, $directives);
+		}
+		
+		return $required ;
+	}
 	/* (non-PHPdoc)
 	 * @see \Thunderstruct\core\engine\interfaces\Throwable::throwException()
 	 */

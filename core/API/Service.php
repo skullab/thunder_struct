@@ -12,10 +12,11 @@ class Service extends Enum implements Throwable{
 	const URL					= 'url' ;
 	const ROUTER				= 'router' ;
 	const DISPATCHER			= 'dispatcher' ;
-	const VOLT					= 'volt' ;
-	const SESSION				= 'session' ;
 	const REQUEST				= 'request' ;
 	const RESPONSE				= 'response';
+	
+	const VOLT					= 'volt' ;
+	const SESSION				= 'session' ;
 	const COOKIES				= 'cookies';
 	const FILTER				= 'filter';
 	const FLASH					= 'flash';

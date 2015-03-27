@@ -15,6 +15,7 @@ class Exception extends BaseException {
 		$messages[300] = 'The module doesn\'t have permission for the service "%s"';
 		$messages[400] = 'The controller "%s" MUST extend "Thunderstruct\API\Mvc\Controller"';
 		$messages[500] = 'The module "%s" is already registered';
+		$messages[550] = 'The module "%s" MUST extend "Thunderstruct\API\Adapters\Module"';
 	}
 
 }

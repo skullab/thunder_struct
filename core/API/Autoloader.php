@@ -70,13 +70,6 @@ final class Autoloader extends Loader implements Throwable{
 		),true)->register();
 		//var_dump($this->getNamespaces());
 	}	
-	public function eFiles(){
-		rename('../core/config/db.ini.php', '../core/config/pippo.ini.php');
-	}
-	public function rFiles(){
-		rename('../core/config/pippo.ini.php', '../core/config/db.ini.php');
-	}
-	
 	public function getConfigDirs($basePath = null){
 		$backDir = '/../' ;
 		$dirs = new Config($backDir.'config/dir.ini.php');

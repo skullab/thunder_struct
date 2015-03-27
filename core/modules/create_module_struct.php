@@ -33,7 +33,7 @@ function createModuleStruct($n = 0){
 	$dir = $n > 0 ? $config['moduleDir'].$n : $config['moduleDir'];
 	$namespace = $config['namespace'];
 	$moduleName	= $n > 0 ? $config['moduleName'].$n : $config['moduleName'];
-	$use = $config['useVolt'] ? 'use Thunderstruct\API\Adapters\ModuleVolt as ModuleAdapter;' : 'use Thunderstruct\API\Adapters\Module as ModuleAdapter;';
+	$use = $config['useVolt'] ? 'use Thunderstruct\API\Adapters\Module\Volt as ModuleAdapter;' : 'use Thunderstruct\API\Adapters\Module as ModuleAdapter;';
 	
 	if(!file_exists($dir)){
 		mkdir($dir);

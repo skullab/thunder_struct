@@ -18,23 +18,22 @@ abstract class Module implements ModuleDefinitionInterface {
 	private $configDirs ;
 	
 	public function __construct(){
-		//var_dump('call module constructor');
 		
 		$ref = new \ReflectionClass($this);
 		$this->path = str_replace(basename($ref->getFileName()),'',$ref->getFileName());
 		$this->namespace = $ref->getNamespaceName();
 		$this->baseDir = basename(str_replace(basename($ref->getFileName()),'',$ref->getFileName()));
 		
-		$this->dispatcher = Engine::getInstance()->getService(Service::DISPATCHER);
-		$this->view = Engine::getInstance()->getService(Service::VIEW);
-		$this->loader = Engine::getInstance()->getService(Service::LOADER);
+		$this->dispatcher = Service::get(Service::DISPATCHER);
+		$this->view = Service::get(Service::VIEW);
+		$this->loader = Service::get(Service::LOADER);
+		
 		$this->configDirs = $this->loader->getConfigDirs('../');
 		
 		$this->onConstruct();
 	}
 	
 	public function registerAutoloaders(){
-		//var_dump('call module registerAutoloaders');
 		
 		$skip = $this->beforeRegisterAutoloaders($this->loader);
 		if($skip === true)return;
@@ -52,7 +51,6 @@ abstract class Module implements ModuleDefinitionInterface {
 	}
 	
 	public function registerServices($di){
-		//var_dump('call module registerServices ');
 		
 		$skip = $this->beforeRegisterServices($di);
 		if($skip === true)return;

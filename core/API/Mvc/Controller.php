@@ -18,4 +18,12 @@ abstract class Controller extends \Phalcon\Mvc\Controller {
 	protected function getModule(){
 		return $this->moduleInstance ;
 	}
+	
+	public function indexAction(){}
+	
+	public function errorAction(){
+		$args = func_get_args();
+		echo '<div><center><h1>'.$args[0].'</h1><span>'.$args[1].'</span></center></div>' ;
+	}
+	
 }
