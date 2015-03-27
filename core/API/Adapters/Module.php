@@ -5,6 +5,7 @@ namespace Thunderstruct\API\Adapters;
 use \Phalcon\Mvc\ModuleDefinitionInterface;
 use Thunderstruct\API\Engine;
 use Thunderstruct\API\Service;
+use Thunderstruct\API\Manifest;
 
 abstract class Module implements ModuleDefinitionInterface {
 	
@@ -16,6 +17,7 @@ abstract class Module implements ModuleDefinitionInterface {
 	private $dispatcher;
 	private $view;
 	private $configDirs ;
+	private $manifest ;
 	
 	public function __construct(){
 		
@@ -29,6 +31,7 @@ abstract class Module implements ModuleDefinitionInterface {
 		$this->loader = Service::get(Service::LOADER);
 		
 		$this->configDirs = $this->loader->getConfigDirs('../');
+		$this->manifest = Manifest\Reader::load($this->path.'Manifest.xml');
 		
 		$this->onConstruct();
 	}

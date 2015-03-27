@@ -6,5 +6,7 @@ use Thunderstruct\API\Service;
 use Thunderstruct\API\Debug\Log;
 
 class Module extends ModuleAdapter {
-	
+	protected function onConstruct(){
+		
+	}
 }

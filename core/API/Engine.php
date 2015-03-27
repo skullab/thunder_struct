@@ -237,9 +237,8 @@ final class Engine extends Application implements Throwable {
 			}else{
 				throw $e ;
 			}
-		}finally {
-			Log::sessionEnd();
-		}	
+		}
+		Log::sessionEnd();
 	}
 	
 	public function getService($name) {

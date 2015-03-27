@@ -23,7 +23,7 @@
 	</version>
 	
 	<template>
-		<engine>php</engine>
+		<engine extension="phtml">php</engine>
 	</template>
 	
 	<routing>
