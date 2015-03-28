@@ -13,7 +13,7 @@ class IndexController extends Controller{
 	
 	
 	public function indexAction(){
-		
+		$this->assets->addCss('css/style.css');
 	}
 	
 }

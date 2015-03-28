@@ -88,6 +88,22 @@ abstract class Module implements ModuleDefinitionInterface {
 	}
 	protected function onRegisterView($view){
 		$view->setViewsDir($this->configDirs->core->modules.$this->baseDir.'/views/');
+		$engines = $this->manifest->getTemplateEngines();
+		
+		if(!$engines)return ;
+		
+		$registerEngines = array();
+		foreach ($engines as $engine){
+			if(!isset($engine['extension']))continue;
+			if(!Service::isService($engine['engine'])){
+				$engine['engine'] = '\Phalcon\Mvc\View\Engine\\'.ucfirst($engine['engine']);
+			}
+			$registerEngines['.'.$engine['extension']] = $engine['engine'] ;
+		}
+		//dump($registerEngines);
+		if(count($registerEngines) > 0){
+			$view->registerEngines($registerEngines);
+		}
 	}
 	protected function afterRegisterServices($di){}
 	

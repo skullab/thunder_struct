@@ -23,3 +23,13 @@ if(!function_exists('boolval')) {
         return $BOOL ? true : false;
     }
 }
+
+$dump = true ;
+function enableDump($value){
+	global $dump ;
+	$dump = boolval($value);
+}
+function dump($expression){
+	global $dump ;
+	if($dump)var_dump($expression);
+}

@@ -1,13 +1,11 @@
+<!DOCTYPE html>
 <html>
-<head>
-	<title>Thunder_struct</title>
-</head>
-<body>
-
-	<?php echo $this->partial('header')?>
-		<div>
-        <?php echo $this->getContent()?>
-		</div>
-		
-    </body>
+	<head>
+		<meta charset="utf-8">
+		<?php echo $this->tag->getTitle();?>
+		<?php echo $this->assets->outputCss(); ?>
+	</head>
+	<body>
+		<?php echo $this->getContent() ;?>
+	</body>
 </html>

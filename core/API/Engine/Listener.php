@@ -22,7 +22,7 @@ class Listener{
 	}
 	
 	public function afterStartModule($event,$engine){
-		var_dump('after start module');
+		dump('after start module');
 		
 		$router = $engine->getService(Service::ROUTER);
 		$moduleName = $router->getModuleName() ;

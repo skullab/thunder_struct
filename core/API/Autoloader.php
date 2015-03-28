@@ -60,7 +60,7 @@ final class Autoloader extends Loader implements Throwable{
 				$backDir.$this->config['dir']->core->logs,
 				$backDir.$this->config['dir']->core->plugins
 		),true)->register();
-		//var_dump($this->getDirs());
+		//dump($this->getDirs());
 	}
 	private function registerDefaultNamespaces(){
 		$backDir = '../' ;
@@ -68,7 +68,7 @@ final class Autoloader extends Loader implements Throwable{
 				'Thunderstruct\API' 	=> $backDir.$this->config['app']->API->base,
 				'Thunderstruct\Modules'	=> $backDir.$this->config['dir']->core->modules,
 		),true)->register();
-		//var_dump($this->getNamespaces());
+		//dump($this->getNamespaces());
 	}	
 	public function getConfigDirs($basePath = null){
 		$backDir = '/../' ;

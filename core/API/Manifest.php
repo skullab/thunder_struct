@@ -77,10 +77,6 @@ class Manifest extends \SimpleXMLElement implements Throwable{
 		return (int)$this->version->$part ;	
 	}
 	
-	public function getTemplateEngine(){
-		return (string)$this->template->engine ;
-	}
-	
 	public function hasRouting(){
 		return isset($this->routing);
 	}
@@ -92,7 +88,9 @@ class Manifest extends \SimpleXMLElement implements Throwable{
 	public function hasRequired(){
 		return isset($this->required);
 	}
-	
+	public function hasTemplate(){
+		return isset($this->template);
+	}
 	public function isModule(){
 		return $this->getName() === self::TAG_MODULE ;
 	}
@@ -172,6 +170,23 @@ class Manifest extends \SimpleXMLElement implements Throwable{
 		
 		return $required ;
 	}
+	
+	public function getTemplateEngines(){
+		return $this->hasTemplate() ? $this->_getTemplateEngines() : null ;
+	}
+	
+	private function _getTemplateEngines(){
+		$engines = array() ;
+		foreach ($this->template->engine as $engine){
+			$directives = array('engine' => (string)$engine);
+			foreach ($engine->attributes() as $attribute => $value){
+				$directives[(string)$attribute] = (string)$value;
+			}
+			array_push($engines, $directives);
+		}
+		return $engines ;
+	}
+	
 	/* (non-PHPdoc)
 	 * @see \Thunderstruct\core\engine\interfaces\Throwable::throwException()
 	 */

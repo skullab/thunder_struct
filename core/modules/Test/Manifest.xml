@@ -24,6 +24,7 @@
 	
 	<template>
 		<engine extension="phtml">php</engine>
+		<engine extension="volt">volt</engine>
 	</template>
 	
 	<routing>
@@ -41,6 +42,9 @@
 		<group>Service::GROUP_BASE</group>
 		<permission>Service::VOLT</permission>
 		<permission>Service::FLASH</permission>
+		<permission>Service::TAG</permission>
+		<permission>Service::ASSETS</permission>
+		<permission>Service::ESCAPER</permission>
 	</permissions>
 	
 </Module>

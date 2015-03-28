@@ -65,10 +65,7 @@ final class Engine extends Application implements Throwable {
 		} else
 			self::throwException ( null, 100 );
 	}
-	public function setDI($dependencyInjector) {
-	}
-	public function getDI() {
-	}
+	
 	protected function definePermissionGroups(){
 		
 		Permission\Manager::defineGroup(Service::GROUP_BASE, new Permission\Group(
@@ -105,7 +102,7 @@ final class Engine extends Application implements Throwable {
 			$view = new \Phalcon\Mvc\View ();
 			$view->setLayoutsDir ( '../../../'.$dirs->ui->themes . 'default/' );
 			$view->setPartialsDir( '../../../'.$dirs->ui->themes . 'default/partials/' );
-			$view->setTemplateBefore('main');
+			$view->setTemplateAfter('main');
 			return $view;
 		}, true );
 		
@@ -138,22 +135,24 @@ final class Engine extends Application implements Throwable {
 		});
 	}
 	protected function _registerModuleFromManifest($dir) {
+		
 		$router = $this->di->get ( Service::ROUTER );
 		$dirs = $this->loader->getConfigDirs ( '../' );
 		$manifest = Reader::load ( $dirs->core->modules . $dir . '/Manifest.xml' );
 		$routes = $manifest->getRoutes ();
+		$moduleName = $manifest->getModuleName ();
 		
 		foreach ( $routes as $route ) {
-			
+				
 			if(!$router->routeExist($route)){
 				$router->add ( $route );
 			}else{
-				var_dump('The route '.$route->getPattern().' already exists');
+				dump($moduleName.' : The route '.$route->getPattern().' already exists');
+				
 			}
-			
+				
 		}
 		
-		$moduleName = $manifest->getModuleName ();
 		if($this->isRegisteredModule($moduleName))self::throwException ( $moduleName, 500 );
 		
 		$permissions = $manifest->getPermissions ();
@@ -179,8 +178,10 @@ final class Engine extends Application implements Throwable {
 		foreach ($permissionGroup as $modulePermission){
 			Permission\Manager::addPermission($moduleName, $modulePermission);
 		}
-	
-		var_dump($manifest->getRequired());
+		
+		/*dump('template engines for '.$moduleName);
+		dump($manifest->getTemplateEngines());
+		dump('----------------------------------');*/
 		
 		$this->registerModules ( array (
 				$moduleName => array (
@@ -192,9 +193,7 @@ final class Engine extends Application implements Throwable {
 								'major' => $manifest->getVersionInt ( 'major' ),
 								'minor' => $manifest->getVersionInt ( 'minor' )
 						),
-						'required' => $manifest->getRequired(),
 						'permissions' => $permissionGroup,
-						'templateEngine' => $manifest->getTemplateEngine()
 				)
 		), true );
 		
@@ -205,12 +204,12 @@ final class Engine extends Application implements Throwable {
 		$this->setDefaultModule ( $moduleName );
 	}
 	protected function _registerModules() {
-		// var_dump('register modules...');
+		// dump('register modules...');
 		$dirs = $this->loader->getConfigDirs ( '../' );
 		foreach ( scandir ( $dirs->core->modules ) as $dir ) {
 			if ($dir != '.' && $dir != '..' && is_dir ( $dirs->core->modules . $dir ) && $dir != 'Test') {
 				$moduleName = $this->_registerModuleFromManifest ( $dir );
-				// var_dump($moduleName);
+				// dump($moduleName);
 			}
 		}
 	}

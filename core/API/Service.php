@@ -14,7 +14,7 @@ class Service extends Enum implements Throwable{
 	const DISPATCHER			= 'dispatcher' ;
 	const REQUEST				= 'request' ;
 	const RESPONSE				= 'response';
-	
+	const ASSETS				= 'assets' ;
 	const VOLT					= 'volt' ;
 	const SESSION				= 'session' ;
 	const COOKIES				= 'cookies';
@@ -26,7 +26,7 @@ class Service extends Enum implements Throwable{
 	const SECURITY				= 'security';
 	const CRYPT					= 'crypt';
 	const TAG					= 'tag';
-	const ESCAPER				= 'escpaer';
+	const ESCAPER				= 'escaper';
 	const ANNOTATIONS			= 'annotations';
 	const MODELS_MANAGER		= 'modelsManager';
 	const MODELS_METADATA		= 'modelsMetadata';
@@ -53,7 +53,7 @@ class Service extends Enum implements Throwable{
 	}
 	
 	public static function isService($value){
-		return self::isEnumValue($value);
+		return self::isEnumValue($value) || Engine::getInstance()->getDI()->has($value) ;
 	}
 	
 	public static function throwException($message = null, $code = 0, Exception $previous = null) {

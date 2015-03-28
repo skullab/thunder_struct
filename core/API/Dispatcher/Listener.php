@@ -5,24 +5,24 @@ namespace Thunderstruct\API\Dispatcher;
 class Listener {
 	
 	public function beforeDispatchLoop($event, $dispatcher) {
-		var_dump ( 'before dispatch loop' );
+		dump ( 'before dispatch loop' );
 	}
 	public function beforeDispatch($event, $dispatcher) {
-		var_dump ( 'before dispatch' );
+		dump ( 'before dispatch' );
 	}
 	public function beforeExecuteRoute($event, $dispatcher) {
-		var_dump ( 'before execute route' );
+		dump ( 'before execute route' );
 	}
 	
 	public function afterExecuteRoute($event, $dispatcher) {
-		var_dump ( 'after execute route' );
+		dump ( 'after execute route' );
 	}
 	public function beforeNotFoundAction($event, $dispatcher) {
-		var_dump ( 'before not found action' );
-		//var_dump($dispatcher->getActionName());
+		dump ( 'before not found action' );
+		//dump($dispatcher->getActionName());
 	}
 	public function beforeException($event, $dispatcher, $exception) {
-		var_dump ( 'before exception' );
+		dump ( 'before exception' );
 		
 		if ($exception instanceof \Phalcon\Mvc\Dispatcher\Exception) {
 			switch ($exception->getCode()) {
@@ -41,9 +41,9 @@ class Listener {
 	}
 	
 	public function afterDispatch($event, $dispatcher) {
-		var_dump ( 'after dispatch' );
+		dump ( 'after dispatch' );
 	}
 	public function afterDispatchLoop($event, $dispatcher) {
-		var_dump ( 'after dispatch loop' );
+		dump ( 'after dispatch loop' );
 	}
 }

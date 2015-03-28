@@ -3,10 +3,6 @@
 	<namespace>Awesome\App</namespace>
 	<name>awesome</name>
 	
-	<template>
-		<engine>volt</engine>
-	</template>
-	
 	<routing>
 		<route>awesome</route>
 	</routing>

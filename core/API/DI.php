@@ -37,12 +37,12 @@ class DI extends \Phalcon\DI\FactoryDefault {
 		$permission = Permission\Manager::checkPermission ( $moduleName, $name );
 		$className = $this->router->getNamespaceName ();
 			
-		//var_dump ( 'module ' . $moduleName . ' in namespace '.$className.' wanna get  ' . $name );
+		//dump ( 'module ' . $moduleName . ' in namespace '.$className.' wanna get  ' . $name );
 		
 		if (	Service::isService($name) && 
 				Engine::getInstance()->isRegisteredModule($moduleName) &&
 				!$permission){
-			//var_dump ( 'doesn\'t have permission for ' . $name . ' ' . $moduleName . ' ' . ( int ) $permission );
+			//dump ( 'doesn\'t have permission for ' . $name . ' ' . $moduleName . ' ' . ( int ) $permission );
 			Engine::throwException($name,300);
 		}
 		
