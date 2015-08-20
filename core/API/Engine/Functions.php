@@ -24,6 +24,36 @@ if(!function_exists('boolval')) {
     }
 }
 
+function rcopy($src,$dest,$cached = false){
+	
+	if(!is_dir($src)) return false;
+	if(!is_dir($dest)) {
+		$cached = false ;
+		if(!mkdir($dest)) {
+			return false;
+		}
+	}
+	$i = new DirectoryIterator($src);
+	foreach($i as $f) {
+		if($f->isFile()) {
+			if($cached){
+				if(file_exists("$dest/".$f->getFilename())){
+					
+					$destTime = filemtime("$dest/".$f->getFilename());
+					$srcTime = filemtime($f->getRealPath());
+					$diff = $srcTime-$destTime;
+				
+					if($diff < 0)continue;
+				}
+				
+			}
+			copy($f->getRealPath(), "$dest/" . $f->getFilename());
+		} else if(!$f->isDot() && $f->isDir()) {
+			rcopy($f->getRealPath(), "$dest/$f",$cached);
+		}
+	}
+}
+
 $dump = true ;
 function enableDump($value){
 	global $dump ;

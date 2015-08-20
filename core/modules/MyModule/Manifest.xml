@@ -15,8 +15,6 @@
 	
 	<permissions>
 		<group>Service::GROUP_BASE</group>
-		<permission>Service::FLASH</permission>
-		<permission>Service::VOLT</permission>
 	</permissions>
 	
 </Module>

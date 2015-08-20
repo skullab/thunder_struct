@@ -13,7 +13,9 @@ class IndexController extends Controller{
 	
 	
 	public function indexAction(){
+		//var_dump($this->assets->getOptions()['baseUri']);
 		$this->assets->addCss('css/style.css');
+		$this->flash->success("The post was correctly saved!");
 	}
 	
 }

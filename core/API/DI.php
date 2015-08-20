@@ -13,7 +13,8 @@ class DI extends \Phalcon\DI\FactoryDefault {
 	
 	public function get($name, $parameters = []) {
 		if ($this->router == null) {
-			$this->router = $this->getShared ( 'router' );
+			//$this->router = $this->getShared ( 'router' );
+			$this->router = parent::get ( 'router' );
 			$this->_init = true;
 		}
 		if($this->_init){
@@ -37,7 +38,7 @@ class DI extends \Phalcon\DI\FactoryDefault {
 		$permission = Permission\Manager::checkPermission ( $moduleName, $name );
 		$className = $this->router->getNamespaceName ();
 			
-		//dump ( 'module ' . $moduleName . ' in namespace '.$className.' wanna get  ' . $name );
+		dump ( 'module ' . $moduleName . ' in namespace '.$className.' wanna get  ' . $name );
 		
 		if (	Service::isService($name) && 
 				Engine::getInstance()->isRegisteredModule($moduleName) &&

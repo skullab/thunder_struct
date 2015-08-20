@@ -6,6 +6,8 @@ use \Phalcon\Mvc\ModuleDefinitionInterface;
 use Thunderstruct\API\Engine;
 use Thunderstruct\API\Service;
 use Thunderstruct\API\Manifest;
+use Thunderstruct\API\Assets\Manager as AssetsManager;
+use Thunderstruct\API\Assets\Thunderstruct\API\Assets;
 
 abstract class Module implements ModuleDefinitionInterface {
 	
@@ -16,6 +18,7 @@ abstract class Module implements ModuleDefinitionInterface {
 	private $loader ;
 	private $dispatcher;
 	private $view;
+	private $assets;
 	private $configDirs ;
 	private $manifest ;
 	
@@ -28,6 +31,7 @@ abstract class Module implements ModuleDefinitionInterface {
 		
 		$this->dispatcher = Service::get(Service::DISPATCHER);
 		$this->view = Service::get(Service::VIEW);
+		$this->assets = Service::get(Service::ASSETS);
 		$this->loader = Service::get(Service::LOADER);
 		
 		$this->configDirs = $this->loader->getConfigDirs('../');
@@ -36,7 +40,7 @@ abstract class Module implements ModuleDefinitionInterface {
 		$this->onConstruct();
 	}
 	
-	public function registerAutoloaders(){
+	public function registerAutoloaders(\Phalcon\DiInterface $di = null){
 		
 		$skip = $this->beforeRegisterAutoloaders($this->loader);
 		if($skip === true)return;
@@ -53,13 +57,14 @@ abstract class Module implements ModuleDefinitionInterface {
 		$this->afterRegisterAutoloaders($this->loader);
 	}
 	
-	public function registerServices($di){
+	public function registerServices(\Phalcon\DiInterface $di){
 		
 		$skip = $this->beforeRegisterServices($di);
 		if($skip === true)return;
 		
 		$this->onRegisterDispatcher($this->dispatcher);
 		$this->onRegisterView($this->view);
+		$this->onRegisterAssets($di,$this->assets);
 		
 		$this->afterRegisterServices($di);
 	}
@@ -104,6 +109,30 @@ abstract class Module implements ModuleDefinitionInterface {
 		if(count($registerEngines) > 0){
 			$view->registerEngines($registerEngines);
 		}
+	}
+	
+	protected function copyAssets($cached = false){
+		$src = $this->path.'assets/' ;
+		$dest = TS_BASE_DIR.'/public/assets/modules/'.$this->baseDir;
+		
+		/*if($cached && file_exists($dest) && is_dir($dest)){
+			$seconds = time() - filemtime($dest) ;
+			var_dump(time());
+			var_dump(filemtime($dest));
+			if($seconds < 5)return;
+		}*/
+		rcopy($src, $dest,$cached);
+	}
+	
+	protected function onRegisterAssets($di,$assets){
+		$baseDir = $this->baseDir ;
+		$di->set('assets',function() use($baseDir){
+			$assets = new AssetsManager([
+					'baseUri'	=> 'assets/modules/'.$baseDir.'/'
+			]);
+			return $assets ;
+		});
+		$this->copyAssets(true);
 	}
 	protected function afterRegisterServices($di){}
 	

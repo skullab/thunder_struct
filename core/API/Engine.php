@@ -13,9 +13,9 @@ use Thunderstruct\API\Engine\Constants;
 use Thunderstruct\API\Engine\Exception;
 use Thunderstruct\API\Debug\Log;
 
-require 'Tokenizer.php';
-require 'Autoloader.php';
-require 'Engine/Functions.php';
+require_once 'Tokenizer.php';
+require_once 'Autoloader.php';
+require_once 'Engine/Functions.php';
 
 final class Engine extends Application implements Throwable {
 	
