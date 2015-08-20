@@ -17,7 +17,7 @@ final class Constants {
 		define('TS_VERSION',Engine::getVersion());
 		define('TS_PREFIX','ts');
 		define('TS_DB_PREFIX',Engine::getInstance()->getDbPrefix().'_');
-		define('TS_BASE_DIR',$_SERVER['DOCUMENT_ROOT'].basename($_SERVER['REQUEST_URI']));
+		define('TS_BASE_DIR',$_SERVER['DOCUMENT_ROOT'].Engine::getInstance()->getBaseUri());
 		
 		self::$_alreadyInit = true;
 	}

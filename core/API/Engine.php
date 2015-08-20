@@ -75,7 +75,10 @@ final class Engine extends Application implements Throwable {
 				new Permission(Service::VIEW),
 				new Permission(Service::REQUEST),
 				new Permission(Service::RESPONSE),
-				new Permission(Service::URL)
+				new Permission(Service::URL),
+				new Permission(Service::TAG),
+				new Permission(Service::ESCAPER),
+				new Permission(Service::ASSETS)
 		));
 		
 		
@@ -264,6 +267,10 @@ final class Engine extends Application implements Throwable {
 		return $this->loader->getDbPrefix() ;
 	}
 	
+	public function getBaseUri(){
+		$dirs = $this->loader->getConfigDirs ( '../' );
+		return str_replace('/','',$dirs['base']->uri) ;
+	}
 	/*
 	 * (non-PHPdoc)
 	 * @see \Thunderstruct\core\engine\interfaces\Throwable::throwException()

@@ -41,11 +41,6 @@
 	<permissions>
 		<group>Service::GROUP_BASE</group>
 		<permission>Service::VOLT</permission>
-		
-		<permission>Service::TAG</permission>
-		<permission>Service::ASSETS</permission>
-		<permission>Service::ESCAPER</permission>
-		
 		<permission>Service::FLASH</permission>
 	</permissions>
 	
