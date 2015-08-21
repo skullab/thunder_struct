@@ -117,6 +117,7 @@ final class Engine extends Application implements Throwable {
 		
 		$this->di->set ( Service::ROUTER, function () {
 			$router = new Router (false);
+			$router->add('core/ui/themes/default/',array('controller'=>'index'))->setName('theme');
 			return $router;
 		}, true );
 		
@@ -260,7 +261,9 @@ final class Engine extends Application implements Throwable {
 	}
 	
 	public function getModuleDefinition($moduleName){
-		return $this->getModules()[$moduleName] ;
+		if($moduleName != null){
+			return $this->getModules()[$moduleName] ;
+		}else return false ;
 	}
 	
 	public function getDbPrefix(){

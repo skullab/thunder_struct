@@ -9,6 +9,8 @@ class Listener{
 	
 	private static $_alreadyInit = false ;
 	
+	private $wrongModule ;
+	
 	public function __construct(){
 		if(!self::$_alreadyInit){
 			self::$_alreadyInit = true ;
@@ -23,6 +25,8 @@ class Listener{
 	
 	public function afterStartModule($event,$engine){
 		dump('after start module');
+		
+		$this->wrongModule = false ;
 		
 		$router = $engine->getService(Service::ROUTER);
 		$moduleName = $router->getModuleName() ;
@@ -39,10 +43,24 @@ class Listener{
 		if(class_exists($className) && !is_subclass_of($className,'Thunderstruct\API\Mvc\Controller')){
 			Engine::throwException($controller,400);
 		}
+		
+		if(!class_exists($moduleClassName)){
+			//wrong module call... undefined index
+			$this->wrongModule = true ;
+		}
 	}
 	
 	public function beforeHandleRequest($event,$engine){
 		echo '<h3>before handle</h3>';
+		if($this->wrongModule){
+			echo "wrong module";
+			$dispatcher = Service::get(Service::DISPATCHER);
+			$dispatcher->forward(array(
+					'controller'=> 'index',
+					'action' 	=> 'error',
+					'params'	=> array(404,'page not found')
+			));
+		}
 	}
 	
 	public function afterHandleRequest($event,$engine){

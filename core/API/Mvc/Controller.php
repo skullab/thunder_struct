@@ -24,6 +24,7 @@ abstract class Controller extends \Phalcon\Mvc\Controller {
 	
 	public function errorAction(){
 		$args = func_get_args();
+		var_dump($this->moduleInstance->getName());
 		echo '<div><center><h1>'.$args[0].'</h1><span>'.$args[1].'</span></center></div>' ;
 	}
 	

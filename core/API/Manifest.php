@@ -118,6 +118,9 @@ class Manifest extends \SimpleXMLElement implements Throwable{
 				$value = (string)$value;
 				$paths[(string)$attribute] = is_numeric($value) ? (int)$value : $value ; 
 			}
+			if($paths[self::ATTRIBUTE_MODULE] != $this->getModuleName()){
+				unset($paths[self::ATTRIBUTE_NAMESPACE]);
+			}
 			$Route = new Route($pattern,$paths);
 			if(isset($route[self::ATTRIBUTE_HTTP_METHODS])){
 				$httpMethods = explode(',',(string)$route[self::ATTRIBUTE_HTTP_METHODS]);

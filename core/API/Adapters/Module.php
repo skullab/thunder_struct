@@ -136,4 +136,14 @@ abstract class Module implements ModuleDefinitionInterface {
 	}
 	protected function afterRegisterServices($di){}
 	
+	/*******************************************************************/
+	
+	protected function getManifest(){
+		return $this->manifest ;
+	}
+	
+	public function getName(){
+		return $this->getManifest()->getModuleName();
+	}
+	
 }

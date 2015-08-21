@@ -1,13 +1,9 @@
 <?php
-
 namespace Vendor\App\Controllers;
-
 use Thunderstruct\API\Mvc\Controller;
-use Thunderstruct\API\Service;
-
-class IndexController extends Controller {
-
+class PippoController extends Controller{
+	
 	public function indexAction(){
-		echo 'ciao';
+		echo 'pippo controller index action';
 	}
 }

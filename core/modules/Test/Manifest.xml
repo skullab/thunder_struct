@@ -28,9 +28,11 @@
 	</template>
 	
 	<routing>
-		<route controller="1">:controller</route>
 		<route name="defaultModule:index" http-methods="GET"></route>
-		<route>admin</route>
+		<route controller="1">:controller</route>
+		<route module="myModule" controller="index">pippo</route> 
+		<route name="defaultModule:index" http-methods="POST">test</route>
+		<!-- <route>admin</route> -->
 	</routing>
 	
 	<required>
