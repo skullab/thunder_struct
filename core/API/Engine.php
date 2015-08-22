@@ -106,6 +106,11 @@ final class Engine extends Application implements Throwable {
 			$view->setLayoutsDir ( '../../../'.$dirs->ui->themes . 'default/' );
 			$view->setPartialsDir( '../../../'.$dirs->ui->themes . 'default/partials/' );
 			$view->setTemplateAfter('main');
+			
+			if(is_dir($dirs->ui->themes . 'default/assets/')){
+				rcopy($dirs->ui->themes . 'default/assets/', $dirs->assets->standard,true);
+			}
+			
 			return $view;
 		}, true );
 		
@@ -273,6 +278,10 @@ final class Engine extends Application implements Throwable {
 	public function getBaseUri(){
 		$dirs = $this->loader->getConfigDirs ( '../' );
 		return str_replace('/','',$dirs['base']->uri) ;
+	}
+	
+	public function getConfigDirs($basePath = null){
+		return $this->loader->getConfigDirs($basePath);
 	}
 	/*
 	 * (non-PHPdoc)

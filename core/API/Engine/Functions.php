@@ -44,6 +44,7 @@ function rcopy($src,$dest,$cached = false){
 					$diff = $srcTime-$destTime;
 				
 					if($diff < 0)continue;
+					var_dump('copy file');
 				}
 				
 			}

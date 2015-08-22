@@ -23,7 +23,16 @@ views		= core/ui/views/
 
 [public]
 
-js			= public/js/
-css			= public/css/
-img			= public/img/
+assets		= public/assets/
+
+[assets]
+
+modules		= public/assets/modules/
+standard	= public/assets/standard/
+uploads		= public/assets/uploads/
+lib			= public/assets/lib/
+
+[lib]
+
+jquery		= public/assets/lib/jquery/
 

@@ -8,6 +8,6 @@ use Thunderstruct\API\Service;
 class IndexController extends Controller {
 
 	public function indexAction(){
-		echo 'ciao';
+		$this->assets->addCss('css/style.css');
 	}
 }
