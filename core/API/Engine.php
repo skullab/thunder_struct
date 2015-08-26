@@ -107,6 +107,7 @@ final class Engine extends Application implements Throwable {
 			$view->setPartialsDir( '../../../'.$dirs->ui->themes . 'default/partials/' );
 			$view->setTemplateAfter('main');
 			
+			//TODO manage themes
 			if(is_dir($dirs->ui->themes . 'default/assets/')){
 				rcopy($dirs->ui->themes . 'default/assets/', $dirs->assets->standard,true);
 			}
@@ -243,6 +244,7 @@ final class Engine extends Application implements Throwable {
 			if(strpos(get_class($e), 'Phalcon') !== false){
 				Log::E('engine',Log::format($e));
 			}else{
+				//TODO active a developer debug mode
 				throw $e ;
 			}
 		}

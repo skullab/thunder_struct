@@ -44,6 +44,7 @@
 		<group>Service::GROUP_BASE</group>
 		<permission>Service::VOLT</permission>
 		<permission>Service::FLASH</permission>
+		<permission>Service::DB</permission>
 	</permissions>
 	
 </Module>

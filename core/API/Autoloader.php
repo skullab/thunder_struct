@@ -47,7 +47,7 @@ final class Autoloader extends Loader implements Throwable{
 	private function createDbName(){
 		$dbname = $this->config['db']->database->default ;
 		if(strpos($dbname,'_ver_') !== false){
-			$dbname = str_replace('_ver_', '_'.Engine::getVersion(), $dbname);
+			$dbname = str_replace('_ver_', '_'.str_replace('.', '_', Engine::getVersion()), $dbname);
 		}
 		$this->config['db']->database->dbname = $dbname ;
 	}
@@ -89,7 +89,7 @@ final class Autoloader extends Loader implements Throwable{
 	
 	public function getDbConnection($token){
 		if($token === self::$_token){
-			$adapter = '\Phalcon\Db\Adapter\Pdo\\' . $this->config['db']->database->adapter ;
+			$adapter = 'Thunderstruct\API\Db\Adapter\Pdo\\' . $this->config['db']->database->adapter ;
 			
 			if($this->config['db']->database->dsn != null){
 				return new $adapter(array(

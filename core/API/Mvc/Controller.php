@@ -10,6 +10,7 @@ abstract class Controller extends \Phalcon\Mvc\Controller {
 		$ref = new \ReflectionClass($this);
 		$namespace = str_replace(basename($ref->getNamespaceName()),'',$ref->getNamespaceName());
 		$this->moduleInstance = $this->getDI()->get($namespace.'Module');
+		$this->tag->setTitleSeparator(' - ');
 		$this->tag->setTitle('Thunder_struct');
 		$this->onInitialize();
 	}

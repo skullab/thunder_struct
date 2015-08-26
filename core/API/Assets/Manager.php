@@ -114,16 +114,49 @@ class Manager extends \Phalcon\Assets\Manager{
 		}
 	}
 	
+	public function getPath($directory){
+		return 'assets/'.$directory.'/' ;
+	}
+	
+	public function getPathLib($resource){
+		return $this->getPath('lib').$resource  ;
+	}
+	
+	public function getPathModules($moduleName,$resource = ''){
+		return $this->getPath('modules').$moduleName.'/'.$resource ;
+	}
+	
+	public function getPathStandard($resource){
+		return $this->getPath('standard').$resource ;
+	}
+	
+	public function getPathUploads($date,$resource = '',$dateIsDirectory = false){
+		if(!$dateIsDirectory){
+			try {
+				$date = new \DateTime($date);
+				$dir = $date->format('Y/m/d');
+			}catch (\Exception $e){
+				$dir = $date ;
+			}
+		}else{
+			$dir = $date ;
+		}
+		return $this->getPath('uploads').$dir.'/'.$resource ;
+	}
 	/*************************************************************************/
 	
+	public function outputJQuery($version = false){
+		$collection = $version === false ? 'jquery' : 'jquery-'.$version ;
+		return $this->outputJs($collection);
+	}
 	
-	public function requireJQuery($version = null,$cdn = false){
+	public function requireJQuery($version = 'default',$cdn = false){
 		
 		$path =  $this->jqueryUri ;
 		if($cdn){
-			$path = $version == null ? '//code.jquery.com/jquery.js' : '//code.jquery.com/jquery-' . $version . '.js' ;
+			$path = $version == 'default' ? '//code.jquery.com/jquery.js' : '//code.jquery.com/jquery-' . $version . '.js' ;
 		}else{
-			$path .= $version == null ? 'jquery.js' : 'jquery-' . $version . '.js' ;
+			$path .= $version == 'default' ? 'jquery.js' : 'jquery-' . $version . '.js' ;
 		}
 		if(!array_key_exists($path, $this->stackJQuery)){
 			$min = strpos($version, 'min');
@@ -133,7 +166,8 @@ class Manager extends \Phalcon\Assets\Manager{
 					'min'		=> !$filter,
 					'cdn'		=> $cdn
 			);
-			parent::addJs($path,!$cdn,$filter,null);
+			$this->collection('jquery')->addJs($path,!$cdn,$filter,null);
+			$this->collection('jquery-'.$version)->addJs($path,!$cdn,$filter,null);
 		}
 	}
 	

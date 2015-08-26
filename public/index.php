@@ -8,6 +8,7 @@ use Thunderstruct\API\Engine;
 enableDump(false);
 
 $e = new Engine();
+$e->debugMode(true);
 $e->run();
 
 
