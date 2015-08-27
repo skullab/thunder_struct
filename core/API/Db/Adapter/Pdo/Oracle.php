@@ -1,6 +1,6 @@
 <?php
 
 namespace Thunderstruct\API\Db\Adapter\Pdo;
-
-class Oracle extends \Phalcon\Db\Adapter\Pdo\Oracle{
+use Thunderstruct\API\Db\Adapter\Pdo\Layers\OracleLayer;
+class Oracle extends OracleLayer{
 }

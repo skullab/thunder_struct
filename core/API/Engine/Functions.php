@@ -26,6 +26,12 @@ if(!function_exists('boolval')) {
 
 function rcopy($src,$dest,$cached = false){
 	
+	/*var_dump($src);
+	var_dump('dirname '.dirname($src));*/
+	
+	/*var_dump($dest);
+	var_dump('dirname '.dirname($dest));*/
+	
 	if(!is_dir($src)) return false;
 	if(!is_dir($dest)) {
 		$cached = false ;

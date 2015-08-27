@@ -1,6 +1,6 @@
 <?php
 
 namespace Thunderstruct\API\Db\Adapter\Pdo;
-
-class Postgresql extends \Phalcon\Db\Adapter\Pdo\Postgresql{
+use Thunderstruct\API\Db\Adapter\Pdo\Layers\PostgresqlLayer;
+class Postgresql extends PostgresqlLayer{
 }

@@ -3,12 +3,18 @@ namespace Thunderstruct\API\Assets;
 
 use Thunderstruct\API\Autoloader;
 use Thunderstruct\API\Engine;
+use Thunderstruct\API\Service;
 class Manager extends \Phalcon\Assets\Manager{
 	
-	private $baseUri = '' ;
+	private $siteBaseUri = ''; // like url base uri
+	private $baseUri = '' ; // base uri for module
+	
+	private $assetsUri = '';
 	private $standardUri = '' ;
+	private $themesUri	= '';
 	private $libUri	= '';
 	private $jqueryUri = '' ;
+	
 	private $stackCss = array();
 	private $stackJs = array();
 	private $stackStandardCss = array();
@@ -20,10 +26,16 @@ class Manager extends \Phalcon\Assets\Manager{
 		if(array_key_exists('baseUri', $this->getOptions())){
 			$this->baseUri = $this->getOptions()['baseUri'];
 		}
+		
+		$this->siteBaseUri = Service::get(Service::URL)->getBaseUri();
 		$dirs = Engine::getInstance()->getConfigDirs();
+		$this->assetsUri = $dirs['public']->assets ;
 		$this->standardUri = $dirs['assets']->standard ;
+		$this->themesUri = $dirs['assets']->themes ;
 		$this->libUri = $dirs['assets']->lib ;
 		$this->jqueryUri = $dirs['lib']->jquery ;
+		
+		$this->collection('jquery');
 	}
 	
 	public function addCss ($path, $local = true, $filter = true, $attributes = null){
@@ -115,11 +127,11 @@ class Manager extends \Phalcon\Assets\Manager{
 	}
 	
 	public function getPath($directory){
-		return 'assets/'.$directory.'/' ;
+		return $this->siteBaseUri.$this->assetsUri.$directory.'/' ;
 	}
 	
 	public function getPathLib($resource){
-		return $this->getPath('lib').$resource  ;
+		return $this->libUri.$resource  ;
 	}
 	
 	public function getPathModules($moduleName,$resource = ''){
@@ -128,6 +140,10 @@ class Manager extends \Phalcon\Assets\Manager{
 	
 	public function getPathStandard($resource){
 		return $this->getPath('standard').$resource ;
+	}
+	
+	public function getPathTheme($resource){
+		return $this->getPath('themes/'.Service::get(Service::THEME_NAME)).$resource ;
 	}
 	
 	public function getPathUploads($date,$resource = '',$dateIsDirectory = false){

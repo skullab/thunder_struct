@@ -1,6 +1,6 @@
 <?php
 
 namespace Thunderstruct\API\Db\Adapter\Pdo;
-
-class Sqlite extends \Phalcon\Db\Adapter\Pdo\Sqlite{
+use Thunderstruct\API\Db\Adapter\Pdo\Layers\SqliteLayer;
+class Sqlite extends SqliteLayer{
 }

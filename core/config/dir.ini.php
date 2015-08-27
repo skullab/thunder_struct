@@ -29,6 +29,7 @@ assets		= public/assets/
 
 modules		= public/assets/modules/
 standard	= public/assets/standard/
+themes		= public/assets/themes/
 uploads		= public/assets/uploads/
 lib			= public/assets/lib/
 

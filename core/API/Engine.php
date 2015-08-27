@@ -78,7 +78,8 @@ final class Engine extends Application implements Throwable {
 				new Permission(Service::URL),
 				new Permission(Service::TAG),
 				new Permission(Service::ESCAPER),
-				new Permission(Service::ASSETS)
+				new Permission(Service::ASSETS),
+				new Permission(Service::THEME_NAME)
 		));
 		
 		
@@ -101,19 +102,30 @@ final class Engine extends Application implements Throwable {
 			return $loader;
 		}, true );
 		
-		$this->di->set ( Service::VIEW, function () use($dirs) {
+		
+		$theme = 'default/' ;
+		$theme = 'javj/' ;
+		
+		$this->di->set ( Service::VIEW, function () use($dirs,$theme) {
+			
+			//$theme = 'javj/' ;
+			
 			$view = new \Phalcon\Mvc\View ();
-			$view->setLayoutsDir ( '../../../'.$dirs->ui->themes . 'default/' );
-			$view->setPartialsDir( '../../../'.$dirs->ui->themes . 'default/partials/' );
+			$view->setLayoutsDir ( '../../../'.$dirs->ui->themes . $theme );
+			$view->setPartialsDir( '../../../'.$dirs->ui->themes . $theme . 'partials/' );
 			$view->setTemplateAfter('main');
 			
 			//TODO manage themes
-			if(is_dir($dirs->ui->themes . 'default/assets/')){
-				rcopy($dirs->ui->themes . 'default/assets/', $dirs->assets->standard,true);
+			if(is_dir($dirs->ui->themes . $theme . 'assets/')){
+				rcopy($dirs->ui->themes . $theme . 'assets/', $dirs->assets->themes.$theme,true);
 			}
 			
 			return $view;
 		}, true );
+		
+		$this->di->set(Service::THEME_NAME,function () use($theme){
+			return str_replace('/','',$theme) ;	
+		},true);
 		
 		$this->di->set ( Service::URL, function () use($dirs) {
 			$url = new \Phalcon\Mvc\Url ();

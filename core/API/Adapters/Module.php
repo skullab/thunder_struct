@@ -127,8 +127,9 @@ abstract class Module implements ModuleDefinitionInterface {
 	protected function onRegisterAssets($di,$assets){
 		$baseDir = $this->baseDir ;
 		$di->set('assets',function() use($baseDir){
+			$dirs = Engine::getInstance()->getConfigDirs() ;
 			$assets = new AssetsManager([
-					'baseUri'	=> 'assets/modules/'.$baseDir.'/'
+					'baseUri'	=> $dirs['assets']->modules.$baseDir.'/'
 			]);
 			return $assets ;
 		});

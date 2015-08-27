@@ -36,6 +36,8 @@ class Service extends Enum implements Throwable{
 	
 	const GROUP_BASE			= 'groupBase';
 	
+	const THEME_NAME			= 'themeName' ;
+	
 	public $service ;
 	
 	public function __construct($serviceName){

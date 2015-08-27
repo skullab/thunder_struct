@@ -12,15 +12,8 @@ use \Phalcon\Db\Column as Column;
 
 class IndexController extends Controller {
 	public function indexAction() {
-		// var_dump($this->assets->getOptions()['baseUri']);
-		// $this->assets->addStandardCss('css/style.css');
-		// $this->assets->addJs('js/ops.js');
-		// $this->assets->requireStandardJs('js/ops.js');
 		
-		// $this->assets->requireStandardCss('css/style.css');
-		// $this->assets->requireCss('css/style.css');
-		// $this->assets->addStandardCss('css/ops.css');
-		$this->assets->requireJQuery ();
+		/*$this->assets->requireJQuery ();
 		$this->assets->requireJQueryCDN ( '1.11.2' );
 		$this->assets->requireJQuery ( '1.11.3' );
 		$this->assets->requireJQuery ( '1.11.3' );
@@ -35,7 +28,7 @@ class IndexController extends Controller {
 		
 		if(!$this->db->dbExists()){
 			var_dump('no db');
-			$this->db->createThisDb();
+			$this->db->createDb();
 		}
 		
 		if (! $this->db->tableExists ( TS_DB_PREFIX . 'users' )) {
@@ -62,6 +55,25 @@ class IndexController extends Controller {
 							) ) 
 					) 
 			) );
-		}
+		}else{
+			$sql     = "INSERT INTO `ts_users`(name, password) VALUES (:name, :password)";
+			$success = $this->db->query($sql, array("name" => "foo", "password" => "1234"));
+		
+			$sql = "SELECT * FROM ts_users";
+			
+			// Send a SQL statement to the database system
+			$result = $this->db->query($sql);
+			
+			// Print each robot name
+			while ($user = $result->fetch()) {
+				var_dump($user["id"]);
+				var_dump($user["name"]);
+				var_dump($user["password"]);
+				var_dump("----------");
+			}
+				
+		}*/
+		
+		echo 'FRONTEND' ;
 	}
 }

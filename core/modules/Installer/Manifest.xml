@@ -25,7 +25,8 @@
 	</template>
 				
 	<routing>
-		<route>installer</route>
+		<route>install</route>
+		<route action="1">install/:action</route>
 	</routing>
 	
 	<required>
@@ -34,10 +35,8 @@
 				
 	<permissions>
 		<group>Service::GROUP_BASE</group>
-
 		<permission>Service::VOLT</permission>
-<permission>Service::FLASH</permission>
-<permission>Service::DB</permission>
-
+		<permission>Service::FLASH</permission>
+		<permission>Service::DB</permission>
 	</permissions>
 </Module>
