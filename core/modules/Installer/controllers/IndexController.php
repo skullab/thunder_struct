@@ -12,4 +12,8 @@ class IndexController extends Controller {
 	public function successAction(){
 		$this->flash->success ( "Installation success !" );
 	}
+	
+	public function installAction(){
+		echo 'ok installing...';
+	}
 }

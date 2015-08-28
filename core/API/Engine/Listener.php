@@ -58,7 +58,7 @@ class Listener{
 			$dispatcher->forward(array(
 					'controller'=> 'index',
 					'action' 	=> 'error',
-					'params'	=> array(404,'page not found')
+					'params'	=> array('code'=>404,'message'=>'page not found')
 			));
 		}
 	}

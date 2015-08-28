@@ -74,6 +74,23 @@ class IndexController extends Controller {
 				
 		}*/
 		
-		echo 'FRONTEND' ;
+		echo 'FRONTEND<br>' ;
+		$this->dispatcher->forward(array(
+				'module' => 'installer',
+				'controller'=>'index',
+				'action'=>'install'				
+		));
+		//$this->response->redirect(array('for'=>'install','controller'=>'index','action'=>'install'));
+	}
+	
+	public function errorAction(){
+		$code     = $this->dispatcher->getParam('code');
+		$message  = $this->dispatcher->getParam('message');
+		echo '<h1>OPS...</h1>';
+		echo '<h3>'.$code.'</h3><h2>'.$message.'</h2>';
+	}
+	
+	public function installAction(){
+		echo 'no this is frontend no installer...';
 	}
 }
