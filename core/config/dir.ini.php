@@ -36,4 +36,5 @@ lib			= public/assets/lib/
 [lib]
 
 jquery		= public/assets/lib/jquery/
+jqueryui	= public/assets/lib/jqueryui/
 

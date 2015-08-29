@@ -1,6 +1,7 @@
 <?php
 
 namespace Thunderstruct\API\Mvc;
+use Thunderstruct\API\Http\Response;
 
 abstract class Controller extends \Phalcon\Mvc\Controller {
 	
@@ -13,6 +14,7 @@ abstract class Controller extends \Phalcon\Mvc\Controller {
 		$this->tag->setTitleSeparator(' - ');
 		$this->tag->setTitle('Thunder_struct');
 		$this->onInitialize();
+		
 	}
 	
 	protected function onInitialize(){}
@@ -29,4 +31,26 @@ abstract class Controller extends \Phalcon\Mvc\Controller {
 		echo '<div><center><h1>'.$args[0].'</h1><span>'.$args[1].'</span></center></div>' ;
 	}
 	
+	protected function ajax($payload){
+		$status      = 200;
+		$description = 'OK';
+		$headers     = array();
+		$contentType = 'application/json';
+		$content     = json_encode($payload);
+		
+		$response = new Response();
+		
+		$response->setStatusCode($status, $description);
+		$response->setContentType($contentType, 'UTF-8');
+		$response->setContent($content);
+		
+		// Set the additional headers
+		foreach ($headers as $key => $value) {
+			$response->setHeader($key, $value);
+		}
+		
+		$this->view->disable();
+		
+		return $response;
+	}
 }

@@ -106,13 +106,15 @@ class Manifest extends \SimpleXMLElement implements Throwable{
 	private function _getRoutes(){
 		$routes = array();
 		foreach ($this->routing->route as $route){
+			
 			$paths = array(
 				self::ATTRIBUTE_NAMESPACE	=> $this->getModuleNamespace().'\Controllers',
 				self::ATTRIBUTE_MODULE 		=> $this->getModuleName(),
 				self::ATTRIBUTE_CONTROLLER	=> self::VALUE_INDEX,
 				self::ATTRIBUTE_ACTION		=> self::VALUE_INDEX,
 			);
-			$pattern = '/' . (string)$route ;
+			$pattern = '/' . trim((string)$route);
+			//var_dump($pattern);
 			foreach ($route->attributes() as $attribute => $value){
 				if($attribute === self::ATTRIBUTE_HTTP_METHODS || $attribute === self::ATTRIBUTE_NAME)continue;
 				$value = (string)$value;

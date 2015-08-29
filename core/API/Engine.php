@@ -79,7 +79,10 @@ final class Engine extends Application implements Throwable {
 				new Permission(Service::TAG),
 				new Permission(Service::ESCAPER),
 				new Permission(Service::ASSETS),
-				new Permission(Service::THEME_NAME)
+				new Permission(Service::THEME_NAME),
+				new Permission(Service::MODELS_MANAGER),
+				new Permission(Service::MODELS_METADATA),
+				new Permission(Service::MODELS_CACHE)
 		));
 		
 		
@@ -104,7 +107,7 @@ final class Engine extends Application implements Throwable {
 		
 		
 		$theme = 'default/' ;
-		$theme = 'javj/' ;
+		//$theme = 'javj/' ;
 		
 		$this->di->set ( Service::VIEW, function () use($dirs,$theme) {
 			

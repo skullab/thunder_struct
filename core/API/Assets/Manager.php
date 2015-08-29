@@ -14,12 +14,17 @@ class Manager extends \Phalcon\Assets\Manager{
 	private $themesUri	= '';
 	private $libUri	= '';
 	private $jqueryUri = '' ;
+	private $jqueryuiUri = '' ;
 	
 	private $stackCss = array();
 	private $stackJs = array();
 	private $stackStandardCss = array();
  	private $stackStandardJs = array();
  	private $stackJQuery = array();
+ 	private $stackJQueryUi = array();
+ 	
+ 	private $stackCustomJs = array();
+ 	private $stackCustomCss = array();
  	
 	public function __construct($options = null){
 		parent::__construct($options);
@@ -34,8 +39,14 @@ class Manager extends \Phalcon\Assets\Manager{
 		$this->themesUri = $dirs['assets']->themes ;
 		$this->libUri = $dirs['assets']->lib ;
 		$this->jqueryUri = $dirs['lib']->jquery ;
+		$this->jqueryuiUri = $dirs['lib']->jqueryui ;
 		
 		$this->collection('jquery');
+		$this->collection('jqueryui');
+		$this->collection('jqueryuijs');
+		
+		$this->collection('customjs');
+		$this->collection('customcss');
 	}
 	
 	public function addCss ($path, $local = true, $filter = true, $attributes = null){
@@ -126,6 +137,32 @@ class Manager extends \Phalcon\Assets\Manager{
 		}
 	}
 	
+	public function requireCustomJs($path, $local = true, $filter = true, $attributes = null){
+		$path = $this->getPathLib($path) ;
+		if(!array_key_exists($path, $this->stackCustomJs)){
+			$this->stackCustomJs[$path] = array(
+					'resource'	=> basename($path),
+					'local'		=> $local,
+					'filter'	=> $filter,
+					'attributes'=> $attributes
+			);
+			$this->collection('customjs')->addJs($path, $local, $filter, $attributes);
+		}
+	}
+	
+	public function requireCustomCss($path, $local = true, $filter = true, $attributes = null){
+		$path = $this->getPathLib($path) ;
+		if(!array_key_exists($path, $this->stackCustomCss)){
+			$this->stackCustomCss[$path] = array(
+					'resource'	=> basename($path),
+					'local'		=> $local,
+					'filter'	=> $filter,
+					'attributes'=> $attributes
+			);
+			$this->collection('customcss')->addCss($path, $local, $filter, $attributes);
+		}
+	}
+	
 	public function getPath($directory){
 		return $this->siteBaseUri.$this->assetsUri.$directory.'/' ;
 	}
@@ -161,9 +198,28 @@ class Manager extends \Phalcon\Assets\Manager{
 	}
 	/*************************************************************************/
 	
+	public function outputCustomJs(){
+		$collection = 'customjs' ;
+		return $this->outputJs($collection);
+	}
+	
+	public function outputCustomCss(){
+		$collection = 'customcss' ;
+		return $this->outputCss($collection);
+	}
+	
+	/*************************************************************************/
 	public function outputJQuery($version = false){
 		$collection = $version === false ? 'jquery' : 'jquery-'.$version ;
 		return $this->outputJs($collection);
+	}
+	
+	public function outputJQueryUI($version = false){
+		$collection = $version === false ? 'jqueryui' : 'jqueryui-'.$version ;
+		$collectionjs = $version === false ? 'jqueryuijs' : 'jqueryuijs-'.$version ;
+		
+		$this->outputCss($collection);
+		$this->outputJs($collectionjs);
 	}
 	
 	public function requireJQuery($version = 'default',$cdn = false){
@@ -189,5 +245,28 @@ class Manager extends \Phalcon\Assets\Manager{
 	
 	public function requireJQueryCDN($version = null){
 		$this->requireJQuery($version,true);
+	}
+	
+	public function requireJQueryUI($version = 'default',$min = true){
+		$path = $this->jqueryuiUri.$version.'/' ;
+		$pathjs = $path ;
+		$path .= $min ? 'jquery-ui.min.css' : 'jquery-ui.css' ;
+		$pathjs .= $min ? 'jquery-ui.min.js' : 'jquery-ui.js' ;
+		
+		$filter = !$min ;
+		if(!array_key_exists($path, $this->stackJQueryUi)){
+			$this->stackJQueryUi[$path] = array(
+					'version'	=> $version,
+					'min'		=> $min,
+					'js'		=> basename($pathjs)
+			);
+		}
+		
+		$this->collection('jqueryui')->addCss($path,true,$filter,null);
+		$this->collection('jqueryui-'.$version)->addCss($path,true,$filter,null);
+		
+		$this->collection('jqueryuijs')->addJs($pathjs,true,$filter,null);
+		$this->collection('jqueryuijs-'.$version)->addJs($pathjs,true,$filter,null);
+		
 	}
 }

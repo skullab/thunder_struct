@@ -51,9 +51,9 @@ class Listener{
 	}
 	
 	public function beforeHandleRequest($event,$engine){
-		echo '<h3>before handle</h3>';
+		//echo '<h3>before handle</h3>';
 		if($this->wrongModule){
-			echo "wrong module";
+			//echo "wrong module";
 			$dispatcher = Service::get(Service::DISPATCHER);
 			$dispatcher->forward(array(
 					'controller'=> 'index',
@@ -64,7 +64,7 @@ class Listener{
 	}
 	
 	public function afterHandleRequest($event,$engine){
-		echo '<h3>after handle</h3>';
+		//echo '<h3>after handle</h3>';
 		
 	}
 }

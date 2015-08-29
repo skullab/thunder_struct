@@ -8,89 +8,83 @@ use Thunderstruct\API\Mvc\Controller;
 use Thunderstruct\API\Debug\Log;
 use Thunderstruct\API\Tokenizer;
 use Thunderstruct\API\Autoloader;
-use \Phalcon\Db\Column as Column;
+
+use Thunderstruct\Modules\Test\Models\Users;
+use Thunderstruct\API\Mvc\Model\Resultset;
 
 class IndexController extends Controller {
+	
+	const USER_CREATE = 'create' ;
+	const USER_DELETE = 'delete' ;
+	const USER_UPDATE = 'update' ;
+	const USER_LOAD   = 'load' ;
+			
 	public function indexAction() {
 		
-		/*$this->assets->requireJQuery ();
-		$this->assets->requireJQueryCDN ( '1.11.2' );
-		$this->assets->requireJQuery ( '1.11.3' );
-		$this->assets->requireJQuery ( '1.11.3' );
-		$this->assets->requireJQuery ( '1.11.4.min' );
-		$this->assets->requireJs ( 'js/pippo.js' );
-		$this->flash->success ( "The post was correctly saved!" );
+		$this->assets->requireJQueryUI();
+		$this->assets->requireJQuery();
+		$this->assets->requireCustomCss('jtable/2.4.0/themes/metro/blue/jtable.min.css',true,false);
+		$this->assets->requireCustomJs('jtable/2.4.0/jquery.jtable.js',true,false);
+		$this->assets->requireCustomJs('jtable/2.4.0/localization/jquery.jtable.it.js',true,false);
+		$this->assets->requireJs('js/test.js');
 		
-		$this->view->headerHooks = 'header hooks';
-		$this->view->footerHooks = 'footer hooks';
+	}
 		
-		//$this->db->createThisDb();
+	public function usersAction(){
 		
-		if(!$this->db->dbExists()){
-			var_dump('no db');
-			$this->db->createDb();
+		$method = $this->dispatcher->getParam('method');
+		
+		switch ($method){
+			case self::USER_LOAD:
+				return $this->loadUsers();
+			case self::USER_CREATE:
+				return $this->createUser();
+			case self::USER_DELETE:
+				return $this->deleteUser();
+			case self::USER_UPDATE:
+				return $this->updateUser();
 		}
-		
-		if (! $this->db->tableExists ( TS_DB_PREFIX . 'users' )) {
-			var_dump ( 'create users table' );
-			
-			$this->db->createTable ( TS_DB_PREFIX . "users", null, array (
-					"columns" => array (
-							new Column ( "id", array (
-									"type" => Column::TYPE_INTEGER,
-									"size" => 10,
-									"notNull" => true,
-									"autoIncrement" => true,
-									"primary" => true
-							) ),
-							new Column ( "name", array (
-									"type" => Column::TYPE_VARCHAR,
-									"size" => 70,
-									"notNull" => true 
-							) ),
-							new Column ( "password", array (
-									"type" => Column::TYPE_VARCHAR,
-									"size" => 70,
-									"notNull" => true 
-							) ) 
-					) 
-			) );
-		}else{
-			$sql     = "INSERT INTO `ts_users`(name, password) VALUES (:name, :password)";
-			$success = $this->db->query($sql, array("name" => "foo", "password" => "1234"));
-		
-			$sql = "SELECT * FROM ts_users";
-			
-			// Send a SQL statement to the database system
-			$result = $this->db->query($sql);
-			
-			// Print each robot name
-			while ($user = $result->fetch()) {
-				var_dump($user["id"]);
-				var_dump($user["name"]);
-				var_dump($user["password"]);
-				var_dump("----------");
-			}
+	}
+	
+	private function loadUsers(){
+		$method = $this->dispatcher->getParam('method');
+		var_dump($method);
+		$filter = @$_POST['name'];
+		$users = Users::find(array(
+				"name LIKE '%$filter%'",
+				'order'	=> $_GET['jtSorting'],
+				'limit'	=> array('number' => $_GET['jtPageSize'] , 'offset' => $_GET['jtStartIndex'])
 				
-		}*/
-		
-		echo 'FRONTEND<br>' ;
-		$this->dispatcher->forward(array(
-				'module' => 'installer',
-				'controller'=>'index',
-				'action'=>'install'				
 		));
-		//$this->response->redirect(array('for'=>'install','controller'=>'index','action'=>'install'));
+		$table = $users->toArray();
+		$count = Users::count();
+		$payload = array('Result'=>'OK','Records'=>$table,'TotalRecordCount'=>$count);
+		
+		return $this->ajax($payload);
 	}
 	
-	public function errorAction(){
-		$code     = $this->dispatcher->getParam('code');
-		$message  = $this->dispatcher->getParam('message');
-		echo '<h1>OPS...</h1>';
-		echo '<h3>'.$code.'</h3><h2>'.$message.'</h2>';
+	private function createUser(){
+		$user = new Users();
+		$user->create($_POST);
+		$last = Users::find();
+		$payload = array('Result' => 'OK','Record'=>$last->getLast()->toArray());
+
+		return $this->ajax($payload);
 	}
 	
-	public function installAction(){
-		echo 'no this is frontend no installer...';
+	private function deleteUser(){
+		$user = Users::find(array('id = '.@$_POST['id']));
+		if(count($user) == 1){
+			$user->delete();
+		}
+		$payload = array('Result'=>'OK');
+		return $this->ajax($payload);
+	}
+	
+	private function updateUser(){
+		$user = new Users();
+		$user->save($_POST);
+		$payload = array('Result'=>'OK');
+		return $this->ajax($payload);
 	}
 }
